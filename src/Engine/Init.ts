@@ -1,11 +1,15 @@
-import { DEFAULT_ENEMY_SPEED, ENEMY_SPAWN_POINTS } from '../Constants/global';
+import { DEFAULT_ENEMY_SPEED, ENEMY_FINISH_POINTS, ENEMY_SPAWN_POINTS } from '../Constants/global';
 import { Rectangle, Region, Timer, Trigger, Unit } from 'w3ts';
 import Enemy from '../Units/Enemy';
+import { IPoint } from 'types';
 export default class InitEngine {
   enemies: Array<Enemy> = [];
 
   start(): void {
     this.initZones();
+
+    FogEnableOff();
+    FogMaskEnableOff();
 
     const timer = new Timer();
     timer.start(1, true, () => {
@@ -18,28 +22,24 @@ export default class InitEngine {
   }
 
   initZones(): void {
-    const triggerEnd = new Trigger();
-    const regionEnd = new Region();
-
-    regionEnd.addRect(new Rectangle(575, 575, 625, 625));
-    triggerEnd.registerEnterRegion(regionEnd.handle, () => true);
-
-    triggerEnd.addAction(() => {
-      const unit = Unit.fromEvent();
-      const enemy = this.enemies.find(e => e.unit.id === unit.id);
-      enemy.move(0, 0);
+    ENEMY_FINISH_POINTS[0].forEach((point, index, arr) => {
+      if (index + 1 < arr.length) {
+        this.createTriggerZone(point, arr[index + 1]);
+      }
     });
+  }
 
-    const triggerStart = new Trigger();
-    const regionStart = new Region();
+  createTriggerZone(current: IPoint, next: IPoint): void {
+    const trigger = new Trigger();
+    const region = new Region();
 
-    regionStart.addRect(new Rectangle(-25, -25, 25, 25));
-    triggerStart.registerEnterRegion(regionStart.handle, () => true);
+    region.addRect(new Rectangle(current.x - 50, current.y - 50, current.x + 50, current.y + 50));
+    trigger.registerEnterRegion(region.handle, () => true);
 
-    triggerStart.addAction(() => {
+    trigger.addAction(() => {
       const unit = Unit.fromHandle(Unit.fromEvent().handle);
       const enemy = this.enemies.find(e => e.unit.id === unit.id);
-      enemy.move(600, 600);
+      enemy.move(next.x, next.y);
     });
   }
 
@@ -49,7 +49,6 @@ export default class InitEngine {
     const enemy = new Enemy(x, y, face);
     enemy.unit.moveSpeed = DEFAULT_ENEMY_SPEED;
 
-    enemy.move(600, 600);
     print(`Enemy ${enemy.unit.id} has spawned on x=${enemy.unit.x},y=${enemy.unit.y} and face=${enemy.unit.facing}`);
 
     return enemy;
