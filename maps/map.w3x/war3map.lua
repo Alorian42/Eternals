@@ -1,44 +1,9 @@
 gg_trg_Initialization = nil
-gg_unit_Hblm_0003 = nil
-gg_unit_Hpal_0002 = nil
 function InitGlobals()
-end
-
-function CreateUnitsForPlayer0()
-    local p = Player(0)
-    local u
-    local unitID
-    local t
-    local life
-    gg_unit_Hblm_0003 = BlzCreateUnitWithSkin(p, FourCC("Hblm"), -2193.5, 2875.4, 3.208, FourCC("Hblm"))
-end
-
-function CreateUnitsForPlayer1()
-    local p = Player(1)
-    local u
-    local unitID
-    local t
-    local life
-    gg_unit_Hpal_0002 = BlzCreateUnitWithSkin(p, FourCC("Hpal"), 237.9, -832.4, 269.898, FourCC("Hpal"))
-end
-
-function CreatePlayerBuildings()
-end
-
-function CreatePlayerUnits()
-    CreateUnitsForPlayer0()
-    CreateUnitsForPlayer1()
-end
-
-function CreateAllUnits()
-    CreatePlayerBuildings()
-    CreatePlayerUnits()
 end
 
 --
 function Trig_Initialization_Actions()
-    SelectUnitForPlayerSingle(gg_unit_Hblm_0003, Player(0))
-    SelectUnitForPlayerSingle(gg_unit_Hpal_0002, Player(1))
 end
 
 function InitTrig_Initialization()
@@ -120,32 +85,26 @@ function InitCustomTeams()
 end
 
 function InitAllyPriorities()
-    SetStartLocPrioCount(0, 3)
+    SetStartLocPrioCount(0, 1)
     SetStartLocPrio(0, 0, 1, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 1, 2, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 2, 3, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrioCount(1, 2)
-    SetStartLocPrio(1, 0, 2, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(1, 1, 3, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrioCount(2, 2)
-    SetStartLocPrio(2, 0, 1, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(2, 1, 3, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrioCount(3, 2)
-    SetStartLocPrio(3, 0, 1, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(3, 1, 2, MAP_LOC_PRIO_HIGH)
+    SetStartLocPrioCount(1, 1)
+    SetStartLocPrio(1, 0, 0, MAP_LOC_PRIO_HIGH)
+    SetStartLocPrioCount(2, 1)
+    SetStartLocPrio(2, 0, 3, MAP_LOC_PRIO_HIGH)
+    SetStartLocPrioCount(3, 1)
+    SetStartLocPrio(3, 0, 2, MAP_LOC_PRIO_HIGH)
     SetStartLocPrioCount(4, 3)
     SetStartLocPrio(4, 0, 0, MAP_LOC_PRIO_HIGH)
     SetStartLocPrio(4, 1, 2, MAP_LOC_PRIO_HIGH)
 end
 
 function main()
-    SetCameraBounds(-3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
+    SetCameraBounds(-9472.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -9728.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 9472.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 9216.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -9472.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 9216.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 9472.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -9728.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
     SetDayNightModels("Environment\\DNC\\DNCLordaeron\\DNCLordaeronTerrain\\DNCLordaeronTerrain.mdl", "Environment\\DNC\\DNCLordaeron\\DNCLordaeronUnit\\DNCLordaeronUnit.mdl")
     NewSoundEnvironment("Default")
     SetAmbientDaySound("LordaeronSummerDay")
     SetAmbientNightSound("LordaeronSummerNight")
     SetMapMusic("Music", true, 0)
-    CreateAllUnits()
     InitBlizzard()
     InitGlobals()
     InitCustomTriggers()
@@ -159,7 +118,7 @@ function config()
     SetTeams(5)
     SetGamePlacement(MAP_PLACEMENT_TEAMS_TOGETHER)
     DefineStartLocation(0, -2112.0, 2752.0)
-    DefineStartLocation(1, 128.0, -896.0)
+    DefineStartLocation(1, 128.0, 2816.0)
     DefineStartLocation(2, 128.0, -896.0)
     DefineStartLocation(3, 128.0, -896.0)
     DefineStartLocation(4, 128.0, -896.0)
