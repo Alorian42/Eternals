@@ -1,33 +1,75 @@
-import { DEFAULT_ENEMY_SPEED, ENEMY_FINISH_POINTS, ENEMY_SPAWN_POINTS } from '../Constants/global';
+import { DEFAULT_ENEMY_SPEED, PLAYER_0, PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4, PLAYER_5, PLAYER_6, PLAYER_7, ENEMY_SPAWN_POINTS } from '../Constants/global';
 import { Rectangle, Region, Timer, Trigger, Unit } from 'w3ts';
 import Enemy from '../Units/Enemy';
 import { IPoint } from 'types';
 import { IEnemy } from '../types';
+import CommandsEngine from './Commands';
+
 export default class InitEngine {
   enemies: Array<Enemy> = [];
+  commands = new CommandsEngine();
+  activePlayers: Array<number> = [];
 
   start(): void {
-    this.initZones();
+    this.commands.initCommands();
+    this.initPlayers();
 
     FogEnableOff();
     FogMaskEnableOff();
 
-    this.spawnWave(Enemy, 0, 5);
-    this.spawnWave(Enemy, 1, 5);
+    this.activePlayers.forEach(index => {
+      this.initZones(index);
+      this.spawnWave(Enemy, index, 5);
+    });
   }
 
-  initZones(): void {
-    ENEMY_FINISH_POINTS[0].forEach((point, index, arr) => {
-      if (index + 1 < arr.length) {
-        this.createTriggerZoneWaypoint(point, arr[index + 1]);
-      } else {
-        this.createTriggerZoneFinish(point);
+  initPlayers(): void {
+    ForForce(GetPlayersAll(), () => {
+      const player = GetEnumPlayer();
+      if (GetPlayerSlotState(player) === PLAYER_SLOT_STATE_PLAYING && GetPlayerController(player) === MAP_CONTROL_USER) {
+        const index = GetPlayerId(player);
+        this.activePlayers.push(Number(index));
       }
     });
+  }
 
-    ENEMY_FINISH_POINTS[1].forEach((point, index, arr) => {
-      if (index + 1 < arr.length) {
-        this.createTriggerZoneWaypoint(point, arr[index + 1]);
+  initZones(player: number): void {
+    let points = [];
+
+    switch (player) {
+      case 0:
+        points = PLAYER_0;
+        break;
+      case 1:
+        points = PLAYER_1;
+        break;
+      case 2:
+        points = PLAYER_2;
+        break;
+      case 3:
+        points = PLAYER_3;
+        break;
+      case 4:
+        points = PLAYER_4;
+        break;
+      case 5:
+        points = PLAYER_5;
+        break;
+      case 6:
+        points = PLAYER_6;
+        break;
+      case 7:
+        points = PLAYER_7;
+        break;
+
+      default:
+        break;
+    }
+
+
+    points.forEach((point, i, arr) => {
+      if (i + 1 < arr.length) {
+        this.createTriggerZoneWaypoint(point, arr[i + 1]);
       } else {
         this.createTriggerZoneFinish(point);
       }
@@ -71,8 +113,6 @@ export default class InitEngine {
 
       if (counter >= size) {
         timer.destroy();
-
-        print('Wave spawned');
       }
     });
   }
@@ -82,8 +122,6 @@ export default class InitEngine {
 
     const enemy = new type(x, y, face);
     enemy.unit.moveSpeed = DEFAULT_ENEMY_SPEED;
-
-    print(`Enemy ${enemy.unit.id} has spawned on x=${enemy.unit.x},y=${enemy.unit.y} and face=${enemy.unit.facing}`);
 
     return enemy;
   }
