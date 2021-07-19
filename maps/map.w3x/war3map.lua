@@ -3,24 +3,7 @@ function InitGlobals()
 end
 
 --
-function Trig_Initialization_Func001Func001C()
-    if (not (GetPlayerSlotState(GetEnumPlayer()) == PLAYER_SLOT_STATE_PLAYING)) then
-        return false
-    end
-    if (not (GetPlayerController(GetEnumPlayer()) == MAP_CONTROL_USER)) then
-        return false
-    end
-    return true
-end
-
-function Trig_Initialization_Func001A()
-    if (Trig_Initialization_Func001Func001C()) then
-    else
-    end
-end
-
 function Trig_Initialization_Actions()
-    ForForce(GetPlayersAll(), Trig_Initialization_Func001A)
 end
 
 function InitTrig_Initialization()
