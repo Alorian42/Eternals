@@ -121,3 +121,9 @@ STRING 23
 AddColdDamageAbility
 }
 
+STRING 25
+// Abilities: A007 (AddColdDamageGem), Name (Name)
+{
+AddColdDamageGem
+}
+
