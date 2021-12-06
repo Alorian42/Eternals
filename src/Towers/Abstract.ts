@@ -3,7 +3,6 @@ import { InventorySize } from '../types';
 
 export default abstract class Tower {
   unit!: Unit;
-  attack = 35;
 
   constructor(player: MapPlayer, x: number, y: number, face: number, attackDamage: number, attackCooldown: number, inventorySize: InventorySize) {
     this.unit = new Unit(player, this.unitId, x, y, face);

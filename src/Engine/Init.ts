@@ -9,6 +9,7 @@ import { Players } from 'w3ts/globals';
 import AddColdDamageGem from '../Items/AddColdDamage';
 import Tower from '../Towers/Abstract';
 import AbstractItem from '../Items/Abstract';
+import BuildButton from '../Buttons/Build';
 
 export default class InitEngine {
   enemies: Array<Enemy> = [];
@@ -26,14 +27,21 @@ export default class InitEngine {
 
     this.activePlayers.forEach(index => {
       this.initZones(index);
-      this.spawnWave(Enemy, index, 5);
-      const tower = this.buildTower(BasicTower, Players[index]);
-      this.towers.push(tower);
+      this.spawnWave(Enemy, index, 500);
+      this.buildTower(BasicTower, Players[index], -2170, 2600);
+      this.buildTower(BasicTower, Players[index], -2170, 2300);
       const addColdDamage = new AddColdDamageGem(-2000, 2600);
+      const addColdDamage2 = new AddColdDamageGem(-2000, 2300);
       this.items.push(addColdDamage);
+      this.items.push(addColdDamage2);
     });
 
     this.initItems();
+    this.initButtons();
+  }
+
+  initButtons(): void {
+    new BuildButton();
   }
 
   initItems(): void {
@@ -165,7 +173,9 @@ export default class InitEngine {
     return enemy;
   }
 
-  buildTower(type: ITower, player: MapPlayer): BasicTower {
-    return new type(player, -2170, 2600, 270);
+  buildTower(type: ITower, player: MapPlayer, x: number, y: number): void {
+    const tower = new type(player, x, y, 270);
+
+    this.towers.push(tower);
   }
 }
