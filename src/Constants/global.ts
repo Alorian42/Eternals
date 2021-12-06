@@ -193,4 +193,15 @@ export const PLAYER_7 = [
   },
 ];
 
+export const PLAYERS = {
+  PLAYER_0,
+  PLAYER_1,
+  PLAYER_2,
+  PLAYER_3,
+  PLAYER_4,
+  PLAYER_5,
+  PLAYER_6,
+  PLAYER_7,
+};
+
 export const DEFAULT_ENEMY_SPEED = 360;

@@ -1,14 +1,21 @@
 import { DEFAULT_ENEMY_SPEED, PLAYER_0, PLAYER_1, PLAYER_2, PLAYER_3, PLAYER_4, PLAYER_5, PLAYER_6, PLAYER_7, ENEMY_SPAWN_POINTS } from '../Constants/global';
-import { Rectangle, Region, Timer, Trigger, Unit } from 'w3ts';
+import { Rectangle, Region, Timer, Trigger, Unit, MapPlayer } from 'w3ts';
 import Enemy from '../Units/Enemy';
 import { IPoint } from 'types';
-import { IEnemy } from '../types';
+import { IEnemy, ITower } from '../types';
 import CommandsEngine from './Commands';
+import BasicTower from '../Towers/Basic';
+import { Players } from 'w3ts/globals';
+import AddColdDamageGem from '../Items/AddColdDamage';
+import Tower from '../Towers/Abstract';
+import AbstractItem from '../Items/Abstract';
 
 export default class InitEngine {
   enemies: Array<Enemy> = [];
   commands = new CommandsEngine();
   activePlayers: Array<number> = [];
+  towers: Array<Tower> = [];
+  items: Array<AbstractItem> = [];
 
   start(): void {
     this.commands.initCommands();
@@ -20,6 +27,38 @@ export default class InitEngine {
     this.activePlayers.forEach(index => {
       this.initZones(index);
       this.spawnWave(Enemy, index, 5);
+      const tower = this.buildTower(BasicTower, Players[index]);
+      this.towers.push(tower);
+      const addColdDamage = new AddColdDamageGem(-2000, 2600);
+      this.items.push(addColdDamage);
+    });
+
+    this.initItems();
+  }
+
+  initItems(): void {
+    const pickupTrigger = new Trigger();
+    pickupTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_PICKUP_ITEM);
+
+    pickupTrigger.addAction(() => {
+      const unit = GetTriggerUnit();
+      const enumItem = GetManipulatedItem();
+      const item = this.items.find(i => i.item.id === GetHandleId(enumItem));
+      const tower = this.towers.find(t => t.unit.id === GetHandleId(unit));
+
+      item.onPickup(tower);
+    });
+
+    const dropTrigger = new Trigger();
+    dropTrigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_DROP_ITEM);
+
+    dropTrigger.addAction(() => {
+      const unit = GetTriggerUnit();
+      const enumItem = GetManipulatedItem();
+      const item = this.items.find(i => i.item.id === GetHandleId(enumItem));
+      const tower = this.towers.find(t => t.unit.id === GetHandleId(unit));
+
+      item.onDrop(tower);
     });
   }
 
@@ -124,5 +163,9 @@ export default class InitEngine {
     enemy.unit.moveSpeed = DEFAULT_ENEMY_SPEED;
 
     return enemy;
+  }
+
+  buildTower(type: ITower, player: MapPlayer): BasicTower {
+    return new type(player, -2170, 2600, 270);
   }
 }
