@@ -1,0 +1,5 @@
+[Misc]
+DropItemRange=100000.0
+GiveItemRange=100000.0
+PickupItemRange=100000.0
+

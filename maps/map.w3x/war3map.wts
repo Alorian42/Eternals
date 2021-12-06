@@ -73,3 +73,51 @@ STRING 15
 Player 8
 }
 
+STRING 16
+// Units: t001 (Tower), Name (Name)
+{
+Tower
+}
+
+STRING 17
+// Abilities: A000 (Inventory - 1), Name (Name)
+{
+Inventory - 1
+}
+
+STRING 18
+// Abilities: A001 (Inventory - 2), Name (Name)
+{
+Inventory - 2
+}
+
+STRING 19
+// Abilities: A002 (Inventory - 3), Name (Name)
+{
+Inventory - 3
+}
+
+STRING 20
+// Abilities: A003 (Inventory - 4), Name (Name)
+{
+Inventory - 4
+}
+
+STRING 21
+// Abilities: A004 (Inventory - 5), Name (Name)
+{
+Inventory - 5
+}
+
+STRING 22
+// Abilities: A005 (Inventory - 6), Name (Name)
+{
+Inventory - 6
+}
+
+STRING 23
+// Items: I000 (AddColdDamageAbility), Name (Name)
+{
+AddColdDamageAbility
+}
+

@@ -1,8 +1,27 @@
 gg_trg_Initialization = nil
+gg_trg_Untitled_Trigger_001 = nil
 function InitGlobals()
 end
 
 --
+function Trig_Untitled_Trigger_001_Conditions()
+    if (not (GetItemTypeId(GetEnumItem()) == FourCC("texp"))) then
+        return false
+    end
+    return true
+end
+
+function Trig_Untitled_Trigger_001_Actions()
+    RemoveItem(GetManipulatedItem())
+end
+
+function InitTrig_Untitled_Trigger_001()
+    gg_trg_Untitled_Trigger_001 = CreateTrigger()
+    TriggerRegisterAnyUnitEventBJ(gg_trg_Untitled_Trigger_001, EVENT_PLAYER_UNIT_PICKUP_ITEM)
+    TriggerAddCondition(gg_trg_Untitled_Trigger_001, Condition(Trig_Untitled_Trigger_001_Conditions))
+    TriggerAddAction(gg_trg_Untitled_Trigger_001, Trig_Untitled_Trigger_001_Actions)
+end
+
 function Trig_Initialization_Actions()
 end
 
@@ -12,6 +31,7 @@ function InitTrig_Initialization()
 end
 
 function InitCustomTriggers()
+    InitTrig_Untitled_Trigger_001()
     InitTrig_Initialization()
 end
 
