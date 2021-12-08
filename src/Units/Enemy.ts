@@ -3,6 +3,9 @@ import { Players } from 'w3ts/globals';
 
 export default class Enemy {
   unit!: Unit;
+  name = 'Basic Enemy';
+  attack = 100;
+
   constructor(x: number, y: number, face: number) {
     this.unit = new Unit(Players[11], this.unitId, x, y, face);
   }

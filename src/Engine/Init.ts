@@ -10,6 +10,7 @@ import AddColdDamageGem from '../Items/AddColdDamage';
 import Tower from '../Towers/Abstract';
 import AbstractItem from '../Items/Abstract';
 import BuildButton from '../Buttons/Build';
+import UiEngine from '../Ui/Engine';
 
 export default class InitEngine {
   enemies: Array<Enemy> = [];
@@ -17,6 +18,7 @@ export default class InitEngine {
   activePlayers: Array<number> = [];
   towers: Array<Tower> = [];
   items: Array<AbstractItem> = [];
+  uiEngine: UiEngine = new UiEngine(this);
 
   start(): void {
     this.commands.initCommands();
@@ -24,6 +26,9 @@ export default class InitEngine {
 
     FogEnableOff();
     FogMaskEnableOff();
+    EnableWorldFogBoundary(false);
+
+    this.uiEngine.start();
 
     this.activePlayers.forEach(index => {
       this.initZones(index);
@@ -177,5 +182,9 @@ export default class InitEngine {
     const tower = new type(player, x, y, 270);
 
     this.towers.push(tower);
+  }
+
+  findUnitById(id: number): Enemy | Tower | undefined {
+    return this.enemies.find(e => e.unit.id === id) || this.towers.find(t => t.unit.id === id);
   }
 }

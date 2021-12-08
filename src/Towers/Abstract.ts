@@ -3,6 +3,8 @@ import { InventorySize } from '../types';
 
 export default abstract class Tower {
   unit!: Unit;
+  name!: string;
+  attack = 0;
 
   constructor(player: MapPlayer, x: number, y: number, face: number, attackDamage: number, attackCooldown: number, inventorySize: InventorySize) {
     this.unit = new Unit(player, this.unitId, x, y, face);
@@ -13,6 +15,7 @@ export default abstract class Tower {
   }
 
   setTowerDamage(damage: number): void {
+    this.attack = damage;
     this.unit.setBaseDamage(damage - 1, 0);
     this.unit.setDiceNumber(1, 0);
     this.unit.setDiceSides(1, 0);

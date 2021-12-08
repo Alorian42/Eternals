@@ -1,9 +1,33 @@
+udg_UnitStatIcon = __jarray("")
 gg_trg_Initialization = nil
 function InitGlobals()
+    local i = 0
+    i = 0
+    while (true) do
+        if ((i > 1)) then break end
+        udg_UnitStatIcon[i] = ""
+        i = i + 1
+    end
 end
 
 --
 function Trig_Initialization_Actions()
+    udg_UnitStatIcon[1] = "ReplaceableTextures\\CommandButtons\\BTNSteelMelee.blp"
+    udg_UnitStatIcon[2] = "ReplaceableTextures\\CommandButtons\\BTNHumanArmorUpOne.blp"
+    udg_UnitStatIcon[3] = "ReplaceableTextures\\PassiveButtons\\PASBTNThickFur.blp"
+    udg_UnitStatIcon[4] = "ReplaceableTextures\\CommandButtons\\BTNEvasion.blp"
+    udg_UnitStatIcon[5] = "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp"
+    udg_UnitStatIcon[6] = "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp"
+    udg_UnitStatIcon[7] = "ReplaceableTextures\\CommandButtons\\BTNGlove.blp"
+    udg_UnitStatIcon[8] = "UI\\Widgets\\Console\\Human\\infocard-gold.blp"
+    udg_UnitStatIcon[9] = "UI\\Widgets\\Console\\Human\\infocard-supply.blp"
+    udg_UnitStatIcon[10] = "UI\\Widgets\\Console\\Human\\infocard-heroattributes-str.blp"
+    udg_UnitStatIcon[11] = "UI\\Widgets\\Console\\Human\\infocard-heroattributes-agi.blp"
+    udg_UnitStatIcon[12] = "UI\\Widgets\\Console\\Human\\infocard-heroattributes-int.blp"
+    udg_UnitStatIcon[13] = "ReplaceableTextures\\CommandButtons\\BTNSorceressAdept.blp"
+    udg_UnitStatIcon[14] = "ReplaceableTextures\\CommandButtons\\BTNPriestAdept.blp"
+    udg_UnitStatIcon[15] = "ReplaceableTextures\\CommandButtons\\BTNCirclet.blp"
+    udg_UnitStatIcon[16] = "ReplaceableTextures\\CommandButtons\\BTNRingJadeFalcon.blp"
 end
 
 function InitTrig_Initialization()
