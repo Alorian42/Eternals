@@ -2,7 +2,7 @@ import AbstractItem from './Abstract';
 import Tower from '../Towers/Abstract';
 
 export default class AddColdDamageGem extends AbstractItem {
-  bonusDamage = 1;
+  bonusDamage = 100;
 
   constructor(x: number, y: number) {
     super(x, y);
@@ -13,14 +13,10 @@ export default class AddColdDamageGem extends AbstractItem {
   }
 
   onPickup(tower: Tower): void {
-    const damage = tower.getTowerDamage();
-
-    tower.setTowerDamage(damage + this.bonusDamage);
+    tower.attack += this.bonusDamage;
   }
 
   onDrop(tower: Tower): void {
-    const damage = tower.getTowerDamage();
-
-    tower.setTowerDamage(damage - this.bonusDamage);
+    tower.attack -= this.bonusDamage;
   }
 }

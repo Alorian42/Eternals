@@ -34,15 +34,28 @@ export default class InitEngine {
       this.initZones(index);
       this.spawnWave(Enemy, index, 500);
       this.buildTower(BasicTower, Players[index], -2170, 2600);
-      this.buildTower(BasicTower, Players[index], -2170, 2300);
       const addColdDamage = new AddColdDamageGem(-2000, 2600);
-      const addColdDamage2 = new AddColdDamageGem(-2000, 2300);
       this.items.push(addColdDamage);
-      this.items.push(addColdDamage2);
     });
 
     this.initItems();
     this.initButtons();
+    this.initDamageSystem();
+  }
+
+  initDamageSystem(): void {
+    const trigger = CreateTrigger();
+    TriggerRegisterPlayerUnitEventSimple(trigger, Player(11), EVENT_PLAYER_UNIT_DAMAGED);
+    TriggerAddAction(trigger, () => {
+      const handle = GetTriggerUnit();
+      const unit = this.findUnitById(GetHandleId(handle)) as Enemy;
+      const towerHandle = GetEventDamageSource();
+      const tower = this.findUnitById(GetHandleId(towerHandle)) as Tower;
+
+      if (unit && tower) {
+        unit.receiveDamage(tower);
+      }
+    });
   }
 
   initButtons(): void {

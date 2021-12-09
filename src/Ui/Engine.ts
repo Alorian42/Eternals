@@ -1,3 +1,4 @@
+import { UnitStatsMap, UnitStatsNameMap } from '../Stats/Stats';
 import { Timer, Trigger } from 'w3ts';
 import InitEngine from '../Engine/Init';
 
@@ -61,18 +62,19 @@ export default class UiEngine {
   }
 
   buildUi(): void {
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test1');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test2');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test3');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test4');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test5');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test6');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test7');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test8');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test9');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test10');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test11');
-    this.customStatAdd(udg_UnitStatIcon[this.count + 1], 'Test12');
+    // @TODO: достать иконки из луа файла и сделать константами
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
+    this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
 
     const timer = new Timer();
     timer.start(0.1, true, () => {
@@ -131,11 +133,11 @@ export default class UiEngine {
       isUnit = !!unit;
 
       if (isUnit) {
-
-      BlzFrameSetText(this.frames[0].frameText, unit.attack.toString());
-      BlzFrameSetText(this.frames[1].frameText, BlzFrameGetText(BlzGetFrameByName('InfoPanelIconValue', 2)));
-
-      BlzFrameSetText(this.frames[5].frameText, GetUnitMoveSpeed(this.customStatSelectedUnit[GetPlayerId(GetLocalPlayer())]).toString());
+        UnitStatsMap.forEach((stat, index) => {
+          BlzFrameSetText(this.frames[index].frameText, unit[stat].toString());
+          BlzFrameSetText(this.frames[index].tooltipTitle, UnitStatsNameMap[stat]);
+          BlzFrameSetText(this.frames[index].tooltipText, unit[stat].toString()); // @todo calc dps, damage reduction, etc.
+        });
       }
     }
     if (isUnit) {
