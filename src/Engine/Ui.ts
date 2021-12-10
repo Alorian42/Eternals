@@ -1,6 +1,6 @@
 import { UnitStatsMap, UnitStatsNameMap } from '../Stats/Stats';
 import { Timer, Trigger } from 'w3ts';
-import InitEngine from '../Engine/Init';
+import InitEngine from './Init';
 
 // Custom Stats by Tasyen
 // https://www.hiveworkshop.com/threads/ui-3x3-custom-unit-stats.316905/

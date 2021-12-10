@@ -9,8 +9,8 @@ import { Players } from 'w3ts/globals';
 import AddColdDamageGem from '../Items/AddColdDamage';
 import Tower from '../Towers/Abstract';
 import AbstractItem from '../Items/Abstract';
-import BuildButton from '../Buttons/Build';
-import UiEngine from '../Ui/Engine';
+import UiEngine from './Ui';
+import StartWaveButton from '../Buttons/StartWave';
 
 export default class InitEngine {
   enemies: Array<Enemy> = [];
@@ -32,7 +32,6 @@ export default class InitEngine {
 
     this.activePlayers.forEach(index => {
       this.initZones(index);
-      this.spawnWave(Enemy, index, 500);
       this.buildTower(BasicTower, Players[index], -2170, 2600);
       const addColdDamage = new AddColdDamageGem(-2000, 2600);
       this.items.push(addColdDamage);
@@ -59,7 +58,9 @@ export default class InitEngine {
   }
 
   initButtons(): void {
-    new BuildButton();
+    new StartWaveButton((playerIndex) => {
+      this.spawnWave(Enemy, playerIndex, 5);
+    });
   }
 
   initItems(): void {
