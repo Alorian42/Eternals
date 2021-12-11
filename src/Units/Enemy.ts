@@ -35,8 +35,6 @@ export default class Enemy implements UnitStats {
     // @TODO calculate incoming damage
     const outcomingDamage = tower.attack;
     const unitLife = GetUnitStateSwap(UNIT_STATE_LIFE, this.unit.handle);
-    print('outcomingDamage:', outcomingDamage);
-    print('unitLife:', unitLife);
     SetUnitLifeBJ(this.unit.handle, unitLife - outcomingDamage);
   }
 

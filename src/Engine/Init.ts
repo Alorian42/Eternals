@@ -11,6 +11,8 @@ import Tower from '../Towers/Abstract';
 import AbstractItem from '../Items/Abstract';
 import UiEngine from './Ui';
 import StartWaveButton from '../Buttons/StartWave';
+import WaveEngine from './WaveEngine';
+import { printDebugMessage } from '../Utils/Debug';
 
 export default class InitEngine {
   enemies: Array<Enemy> = [];
@@ -19,10 +21,14 @@ export default class InitEngine {
   towers: Array<Tower> = [];
   items: Array<AbstractItem> = [];
   uiEngine: UiEngine = new UiEngine(this);
+  waveEngine = new WaveEngine();
 
   start(): void {
+    printDebugMessage('start');
     this.commands.initCommands();
     this.initPlayers();
+
+    printDebugMessage('players inited');
 
     FogEnableOff();
     FogMaskEnableOff();
@@ -58,8 +64,21 @@ export default class InitEngine {
   }
 
   initButtons(): void {
-    new StartWaveButton((playerIndex) => {
-      this.spawnWave(Enemy, playerIndex, 5);
+    new StartWaveButton((playerIndex, button) => {
+      if (this.waveEngine.isInProgress[playerIndex]) {
+        return;
+      }
+      this.waveEngine.isInProgress[playerIndex] = true;
+      BlzFrameSetVisible(button.handle, false);
+
+      this.spawnWave(playerIndex, () => {
+        const timer = new Timer();
+        timer.start(5, false, () => {
+          timer.destroy();
+          BlzFrameSetVisible(button.handle, GetPlayerId(GetLocalPlayer()) === playerIndex);
+          this.waveEngine.isInProgress[playerIndex] = false;
+        });
+      });
     });
   }
 
@@ -170,15 +189,22 @@ export default class InitEngine {
     });
   }
 
-  spawnWave(type: IEnemy, player: number, size: number): void {
+  spawnWave(player: number, finishCallback: () => void): void {
+    const wave = this.waveEngine.generateWave(player);
+    const size = wave.length;
     const timer = new Timer();
+    const waveNumber = this.waveEngine.waves[player];
     let counter = 0;
+
+    printDebugMessage(`Wave #${waveNumber}: ${size} mobs`); // @TODO show to player proper message
+
     timer.start(1, true, () => {
-      this.enemies.push(this.spawnEnemy(type, player));
+      this.enemies.push(this.spawnEnemy(wave[counter], player));
       counter++;
 
       if (counter >= size) {
         timer.destroy();
+        finishCallback();
       }
     });
   }
