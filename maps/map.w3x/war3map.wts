@@ -127,3 +127,9 @@ STRING 25
 AddColdDamageGem
 }
 
+STRING 26
+// Units: h000 (Skeleton Warrior), Name (Name)
+{
+Skeleton Warrior
+}
+

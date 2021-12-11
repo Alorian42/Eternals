@@ -1,6 +1,6 @@
 import { IEnemy } from '../types';
-import Enemy from '../Units/Enemy';
 import { getRandomElement } from '../Utils/Array';
+import SkeletonWarrior from '../Units/SekeletonWarrior';
 
 export default class WaveEngine {
   waves!: Array<number>
@@ -37,7 +37,7 @@ export default class WaveEngine {
   }
 
   getEnemyPool(wave: number): Array<IEnemy> {
-    return wave ? [Enemy] : [Enemy, Enemy]; // @TODO
+    return wave ? [SkeletonWarrior] : [SkeletonWarrior, SkeletonWarrior]; // @TODO
   }
 
   getPackSize(wave: number): number {

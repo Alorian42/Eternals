@@ -199,7 +199,7 @@ export default class InitEngine {
     printDebugMessage(`Wave #${waveNumber}: ${size} mobs`); // @TODO show to player proper message
 
     timer.start(1, true, () => {
-      this.enemies.push(this.spawnEnemy(wave[counter], player));
+      this.enemies.push(this.spawnEnemy(wave[counter], player, waveNumber));
       counter++;
 
       if (counter >= size) {
@@ -209,11 +209,16 @@ export default class InitEngine {
     });
   }
 
-  spawnEnemy(type: IEnemy, player: number): Enemy {
+  spawnEnemy(type: IEnemy, player: number, wave: number): Enemy {
     const { x, y, face } = ENEMY_SPAWN_POINTS[player];
+    const modifier = this.waveEngine.getModifier(wave);
+    printDebugMessage(modifier.toString());
 
     const enemy = new type(x, y, face);
+    enemy.setLife(enemy.unit.maxLife * modifier);
+    enemy.setName(enemy.name);
     enemy.unit.moveSpeed = DEFAULT_ENEMY_SPEED;
+    // @TODO apply wave resistance modifiers
 
     return enemy;
   }
