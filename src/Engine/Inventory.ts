@@ -94,8 +94,8 @@ export default class InventoryEngine {
           BlzFrameSetTexture(buttonIconFrame.handle, this.emptyIcon, 0, false);
 
           BlzFrameSetTooltip(button.handle, tooltipBox);
-          BlzFrameSetAbsPoint(tooltipBox, FRAMEPOINT_TOP, 0.69, 0.3);
-          BlzFrameSetSize(tooltipBox, 0.3, 0.1);
+          BlzFrameSetAbsPoint(tooltipBox, FRAMEPOINT_TOP, 0.69, this.cellYStart + this.cellWithGap);
+          BlzFrameSetSize(tooltipBox, 0.2, this.cellWithGap * (this.height + 2));
           BlzFrameSetText(tooltipTitle, 'Empty');
           BlzFrameSetText(tooltipText, '');
           BlzFrameSetEnable(tooltipText, false);
