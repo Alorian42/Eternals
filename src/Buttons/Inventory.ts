@@ -22,7 +22,11 @@ export default class InventoryButton {
       trigger.triggerRegisterFrameEvent(button, FRAMEEVENT_CONTROL_CLICK);
       trigger.addAction(() => {
         const player = GetPlayerId(GetLocalPlayer());
-        this.callback(player, this.buttons[player]);
+        const trigger = GetPlayerId(GetTriggerPlayer());
+
+        if (player === trigger) {
+          this.callback(player, this.buttons[player]);
+        }
       });
       this.buttons.push(button);
     }

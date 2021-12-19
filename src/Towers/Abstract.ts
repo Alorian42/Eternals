@@ -5,6 +5,7 @@ import { InventorySize } from '../types';
 export default abstract class Tower implements UnitStats {
   unit!: Unit;
   name!: string;
+  icon = 'ReplaceableTextures\\CommandButtons\\BTNElvenGuardTower';
 
   attack = 0;
   fireAddAttack = 0;
