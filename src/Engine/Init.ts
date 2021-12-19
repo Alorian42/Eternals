@@ -13,6 +13,7 @@ import UiEngine from './Ui';
 import StartWaveButton from '../Buttons/StartWave';
 import WaveEngine from './WaveEngine';
 import { printDebugMessage } from '../Utils/Debug';
+import InventoryEngine from './Inventory';
 
 export default class InitEngine {
   enemies: Array<Enemy> = [];
@@ -22,6 +23,7 @@ export default class InitEngine {
   items: Array<AbstractItem> = [];
   uiEngine: UiEngine = new UiEngine(this);
   waveEngine = new WaveEngine();
+  inventoryEngine = new InventoryEngine();
 
   start(): void {
     printDebugMessage('start');
