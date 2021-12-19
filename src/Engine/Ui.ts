@@ -30,6 +30,8 @@ export default class UiEngine {
   }
 
   start(): void {
+    BlzLoadTOCFile('war3mapimported\\CustomStat.toc');
+    BlzLoadTOCFile('war3mapimported\\BoxedText.toc');
     this.initUi();
   }
 
@@ -54,9 +56,6 @@ export default class UiEngine {
 
     this.boxS = BlzCreateFrameByType('SIMPLEFRAME', 'CustomStatFrames.BoxSBoss', BlzGetFrameByName('SimpleUnitStatsPanel', 0), '', 0);
     this.boxF = BlzCreateFrameByType('FRAME', 'CustomStatFrames.BoxFBoss', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), '', 0);
-
-    BlzLoadTOCFile('war3mapimported\\CustomStat.toc');
-    BlzLoadTOCFile('war3mapimported\\BoxedText.toc');
 
     this.buildUi();
   }

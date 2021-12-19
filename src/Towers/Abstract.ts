@@ -24,6 +24,10 @@ export default abstract class Tower implements UnitStats {
   spellCritDamage = 0;
   inventorySize: InventorySize = 'A000';
 
+  get tooltip(): string {
+    return `Attack: ${this.attack}\nAttack speed: ${this.attackSpeed}`;
+  }
+
   constructor(attackCooldown: number, inventorySize: InventorySize) {
     this.attackSpeed = attackCooldown;
     this.inventorySize = inventorySize;

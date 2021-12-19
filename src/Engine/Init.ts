@@ -37,6 +37,7 @@ export default class InitEngine {
     EnableWorldFogBoundary(false);
 
     this.uiEngine.start();
+    this.inventoryEngine.start();
 
     this.activePlayers.forEach(index => {
       this.initZones(index);

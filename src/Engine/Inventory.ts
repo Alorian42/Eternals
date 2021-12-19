@@ -12,7 +12,13 @@ export default class InventoryEngine {
 
   inventory!: Array<Array<Frame>>;
   inventoryBackdrops!: Array<Array<Frame>>;
+  inventoryTooltips!: Array<Array<{
+    title: framehandle,
+    text: framehandle,
+  }>>;
   inventoryBack!: Array<Frame>;
+
+  parent = new Frame('InventoryFrame', Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)), 0, 0, 'FRAME', '');
 
   width = 8 as const;
   height = 8 as const;
@@ -43,7 +49,9 @@ export default class InventoryEngine {
       }
       this.items.push(items);
     }
+  }
 
+  start(): void {
     this.createInventory();
 
     this.button = new InventoryButton((index) => {
@@ -55,9 +63,10 @@ export default class InventoryEngine {
     this.inventory = [];
     this.inventoryBackdrops = [];
     this.inventoryBack = [];
-    const parent = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0));
+    this.inventoryTooltips = [];
+
     for (let index = 0; index < bj_MAX_PLAYERS; index++) {
-      const back = new Frame('InventoryBack', parent, 0, index, 'BACKDROP', 'EscMenuBackdrop');
+      const back = new Frame('InventoryBack', this.parent, 0, index, 'BACKDROP', 'EscMenuBackdrop');
       BlzFrameSetSize(back.handle, this.cellWithGap * (this.width + 2), this.cellWithGap * (this.height + 2));
       BlzFrameSetAbsPoint(back.handle, FRAMEPOINT_TOP, this.cellXStart + this.cellWithGap * 3.5, this.cellYStart + this.cellWithGap);
       BlzFrameSetVisible(back.handle, false);
@@ -66,14 +75,31 @@ export default class InventoryEngine {
 
       const playerInventory: Array<Frame> = [];
       const playerInventoryBackDrops: Array<Frame> = [];
+      const inventoryTooltips: Array<{
+        title: framehandle,
+        text: framehandle,
+      }> = [];
       for (let h = 0; h < this.height; h++) {
         for (let w = 0; w < this.width; w++) {
-          const button = new Frame(`InventoryGridCell${index}`, this.inventoryBack[index], 0, h * this.width + w, 'BUTTON', 'ScoreScreenTabButtonTemplate');
-          const buttonIconFrame = new Frame('InventoryButtonBackdrop', button, 0, index, 'BACKDROP', '');
+          const ctx = h * this.width + w;
+          const button = new Frame(`InventoryGridCell${index}`, this.inventoryBack[index], 0, ctx, 'BUTTON', 'ScoreScreenTabButtonTemplate');
+          const buttonIconFrame = new Frame(`InventoryButtonBackdrop${index}`, button, 0, ctx, 'BACKDROP', '');
+          const tooltipBox = BlzCreateFrame('BoxedText', back.handle, 0, ctx + 100);
+          const tooltipTitle = BlzGetFrameByName('BoxedTextTitle', ctx + 100);
+          const tooltipText = BlzGetFrameByName('BoxedTextValue', ctx + 100);
+
           BlzFrameSetAllPoints(buttonIconFrame.handle, button.handle);
           BlzFrameSetAbsPoint(button.handle, FRAMEPOINT_TOP, this.cellXStart + w * this.cellWithGap, this.cellYStart - h * this.cellWithGap);
           BlzFrameSetSize(button.handle, this.cellSize, this.cellSize);
           BlzFrameSetTexture(buttonIconFrame.handle, this.emptyIcon, 0, false);
+
+          BlzFrameSetTooltip(button.handle, tooltipBox);
+          BlzFrameSetAbsPoint(tooltipBox, FRAMEPOINT_TOP, 0.69, 0.3);
+          BlzFrameSetSize(tooltipBox, 0.3, 0.1);
+          BlzFrameSetText(tooltipTitle, 'Empty');
+          BlzFrameSetText(tooltipText, '');
+          BlzFrameSetEnable(tooltipText, false);
+          BlzFrameSetEnable(tooltipTitle, false);
 
           const trigger = new Trigger();
           trigger.triggerRegisterFrameEvent(button, FRAMEEVENT_CONTROL_CLICK);
@@ -92,10 +118,15 @@ export default class InventoryEngine {
           });
           playerInventory.push(button);
           playerInventoryBackDrops.push(buttonIconFrame);
+          inventoryTooltips.push({
+            title: tooltipTitle,
+            text: tooltipText,
+          });
         }
       }
       this.inventory.push(playerInventory);
       this.inventoryBackdrops.push(playerInventoryBackDrops);
+      this.inventoryTooltips.push(inventoryTooltips);
     }
   }
 
@@ -104,8 +135,12 @@ export default class InventoryEngine {
       const tower = this.items[player][index].tower;
       if (tower) {
         BlzFrameSetTexture(frame.handle, tower.icon, 0, false);
+        BlzFrameSetText(this.inventoryTooltips[player][index].title, tower.name);
+        BlzFrameSetText(this.inventoryTooltips[player][index].text, tower.tooltip);
       } else {
         BlzFrameSetTexture(frame.handle, this.emptyIcon, 0, false);
+        BlzFrameSetText(this.inventoryTooltips[player][index].title, 'Empty');
+        BlzFrameSetText(this.inventoryTooltips[player][index].text, '');
       }
     });
   }
