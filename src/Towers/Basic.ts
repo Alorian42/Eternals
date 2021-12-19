@@ -1,10 +1,11 @@
-import { MapPlayer, Unit } from 'w3ts';
+import { Unit } from 'w3ts';
 import { INVENTORY_SIZE_3 } from '../Abilities/Inventory';
 import Tower from './Abstract';
 
 export default class BasicTower extends Tower {
   unit!: Unit;
   name = 'Basic Tower';
+  icon = 'ReplaceableTextures\\CommandButtons\\BTNBookOfSummoning';
 
   attack = 100;
   armor = 0;
@@ -19,8 +20,8 @@ export default class BasicTower extends Tower {
   spellCritChance = 0;
   spellCritDamage = 0;
 
-  constructor(player: MapPlayer, x: number, y: number, face: number) {
-    super(player, x, y, face, 1, INVENTORY_SIZE_3);
+  constructor() {
+    super(1, INVENTORY_SIZE_3);
   }
 
   get unitId(): number {

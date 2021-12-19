@@ -37,6 +37,9 @@ export default abstract class Enemy implements UnitStats {
     const unitLife = GetUnitStateSwap(UNIT_STATE_LIFE, this.unit.handle);
     SetUnitLifeBJ(this.unit.handle, unitLife - outcomingDamage);
 
+    // @TODO ???
+    // tower.unit.damageTarget(this.unit, outcomingDamage);
+
     // @TODO create damage engine
     const tag = CreateTextTagUnitBJ(`${outcomingDamage}`, this.unit.handle, 0, 8, 100, 100, 100, 1);
     SetTextTagVelocityBJ(tag, 75, 90);

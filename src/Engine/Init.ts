@@ -43,6 +43,10 @@ export default class InitEngine {
       this.buildTower(BasicTower, Players[index], -2170, 2600);
       const addColdDamage = new AddColdDamageGem(-2000, 2600);
       this.items.push(addColdDamage);
+
+      this.inventoryEngine.addItem(index, {
+        tower: new BasicTower(),
+      });
     });
 
     this.initItems();
@@ -226,7 +230,8 @@ export default class InitEngine {
   }
 
   buildTower(type: ITower, player: MapPlayer, x: number, y: number): void {
-    const tower = new type(player, x, y, 270);
+    const tower = new type();
+    tower.createUnit(player, x, y, 270);
 
     this.towers.push(tower);
   }

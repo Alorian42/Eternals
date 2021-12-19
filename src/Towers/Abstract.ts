@@ -22,13 +22,19 @@ export default abstract class Tower implements UnitStats {
   critDamage = 0;
   spellCritChance = 0;
   spellCritDamage = 0;
+  inventorySize: InventorySize = 'A000';
 
-  constructor(player: MapPlayer, x: number, y: number, face: number, attackCooldown: number, inventorySize: InventorySize) {
+  constructor(attackCooldown: number, inventorySize: InventorySize) {
+    this.attackSpeed = attackCooldown;
+    this.inventorySize = inventorySize;
+  }
+
+  createUnit(player: MapPlayer, x: number, y: number, face: number): void {
     this.unit = new Unit(player, this.unitId, x, y, face);
     this.setBaseTowerDamage(0);
-    this.unit.setAttackCooldown(attackCooldown, 0);
+    this.unit.setAttackCooldown(this.attackSpeed, 0);
     this.unit.invulnerable = true;
-    this.unit.addAbility(FourCC(inventorySize));
+    this.unit.addAbility(FourCC(this.inventorySize));
   }
 
   setTowerDamage(damage: number): void {

@@ -11,13 +11,14 @@ export default class InventoryEngine {
   items!: Array<Array<IItem>>;
 
   inventory!: Array<Array<Frame>>;
+  inventoryBackdrops!: Array<Array<Frame>>;
   inventoryBack!: Array<Frame>;
 
   width = 8 as const;
   height = 8 as const;
 
   cellXStart = 0.314 as const;
-  cellYStart = 0.5 as const;
+  cellYStart = 0.45 as const;
   cellSize = 0.02 as const;
   cellGap = 0.005 as const;
 
@@ -28,6 +29,10 @@ export default class InventoryEngine {
   emptyIcon = 'ReplaceableTextures\\CommandButtonsDisabled\\DISnightelf-inventory-slotfiller';
 
   button!: InventoryButton;
+
+  get size(): number {
+    return this.width * this.height;
+  }
 
   constructor() {
     this.items = [];
@@ -48,6 +53,7 @@ export default class InventoryEngine {
 
   createInventory(): void {
     this.inventory = [];
+    this.inventoryBackdrops = [];
     this.inventoryBack = [];
     const parent = Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0));
     for (let index = 0; index < bj_MAX_PLAYERS; index++) {
@@ -59,6 +65,7 @@ export default class InventoryEngine {
       this.inventoryBack.push(back);
 
       const playerInventory: Array<Frame> = [];
+      const playerInventoryBackDrops: Array<Frame> = [];
       for (let h = 0; h < this.height; h++) {
         for (let w = 0; w < this.width; w++) {
           const button = new Frame(`InventoryGridCell${index}`, this.inventoryBack[index], 0, h * this.width + w, 'BUTTON', 'ScoreScreenTabButtonTemplate');
@@ -80,17 +87,28 @@ export default class InventoryEngine {
               const slot = this.inventory[player].findIndex(i => GetHandleId(i.handle) === id);
 
               if (slot >= 0) {
-                printDebugMessage(`${player} clicked on ${slot}`);
                 this.selectItem(player, this.items[player][slot]);
-
               }
             }
           });
           playerInventory.push(button);
+          playerInventoryBackDrops.push(buttonIconFrame);
         }
       }
       this.inventory.push(playerInventory);
+      this.inventoryBackdrops.push(playerInventoryBackDrops);
     }
+  }
+
+  updateInventory(player: number): void {
+    this.inventoryBackdrops[player].forEach((frame, index) => {
+      const tower = this.items[player][index].tower;
+      if (tower) {
+        BlzFrameSetTexture(frame.handle, tower.icon, 0, false);
+      } else {
+        BlzFrameSetTexture(frame.handle, this.emptyIcon, 0, false);
+      }
+    });
   }
 
   selectItem(player: number, item: IItem): void {
@@ -99,9 +117,16 @@ export default class InventoryEngine {
     } else {
       printDebugMessage(`player ${player}, item ${item.tower.icon}`);
     }
+
+    this.updateInventory(player);
   }
 
-  get size(): number {
-    return this.width * this.height;
+  addItem(player: number, item: IItem): void {
+    this.items[player].unshift(item);
+    if (this.items[player].length > this.size) {
+      this.items[player].splice(this.size);
+    }
+
+    this.updateInventory(player);
   }
 }
