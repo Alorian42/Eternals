@@ -1,8 +1,7 @@
 import { UnitStats } from '../Stats/Stats';
-import { Unit } from 'w3ts';
+import { Timer, Unit } from 'w3ts';
 import { Players } from 'w3ts/globals';
 import Tower from '../Towers/Abstract';
-import { printDebugMessage } from '../Utils/Debug';
 
 export default abstract class Enemy implements UnitStats {
   unit!: Unit;
@@ -37,6 +36,16 @@ export default abstract class Enemy implements UnitStats {
     const outcomingDamage = tower.attack;
     const unitLife = GetUnitStateSwap(UNIT_STATE_LIFE, this.unit.handle);
     SetUnitLifeBJ(this.unit.handle, unitLife - outcomingDamage);
+
+    // @TODO create damage engine
+    const tag = CreateTextTagUnitBJ(`${outcomingDamage}`, this.unit.handle, 0, 8, 100, 100, 100, 1);
+    SetTextTagVelocityBJ(tag, 75, 90);
+
+    const timer = new Timer();
+    timer.start(0.7, false, () => {
+      timer.destroy();
+      DestroyTextTagBJ(tag);
+    });
   }
 
   setLife(life: number): void {
