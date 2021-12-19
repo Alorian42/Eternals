@@ -74,7 +74,6 @@ export default class InventoryEngine {
           BlzFrameSetAbsPoint(button.handle, FRAMEPOINT_TOP, this.cellXStart + w * this.cellWithGap, this.cellYStart - h * this.cellWithGap);
           BlzFrameSetSize(button.handle, this.cellSize, this.cellSize);
           BlzFrameSetTexture(buttonIconFrame.handle, this.emptyIcon, 0, false);
-          // BlzFrameSetVisible(button.handle, false);
 
           const trigger = new Trigger();
           trigger.triggerRegisterFrameEvent(button, FRAMEEVENT_CONTROL_CLICK);
@@ -112,10 +111,11 @@ export default class InventoryEngine {
   }
 
   selectItem(player: number, item: IItem): void {
-    if (!item.tower) {
-      printDebugMessage(`Empty slot for player ${player}`);
-    } else {
+    if (item.tower) {
+      // @TODO create tower item
       printDebugMessage(`player ${player}, item ${item.tower.icon}`);
+    } else {
+      printDebugMessage(`Empty slot for player ${player}`);
     }
 
     this.updateInventory(player);
