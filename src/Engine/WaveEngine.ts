@@ -69,6 +69,7 @@ export default class WaveEngine {
     this.enemies.push({
       player,
       wave,
+      // @TODO this is not real spawned units ;(
       enemies: result,
       isInProgress: true,
     });
