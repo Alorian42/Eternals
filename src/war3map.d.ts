@@ -1,4 +1,2 @@
-declare const gg_trg_Initialization: trigger;
-declare const udg_UnitStatIcon: {
-  [key: string]: string,
-};
+declare var gg_trg_Initialization: trigger;
+declare var gg_rct_Builder_Spawn_Red: rect;

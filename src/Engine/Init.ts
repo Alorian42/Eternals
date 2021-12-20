@@ -14,6 +14,7 @@ import StartWaveButton from '../Buttons/StartWave';
 import WaveEngine from './WaveEngine';
 import { printDebugMessage } from '../Utils/Debug';
 import InventoryEngine from './Inventory';
+import RewardEngine from './Reward';
 
 export default class InitEngine {
   enemies: Array<Enemy> = [];
@@ -22,7 +23,7 @@ export default class InitEngine {
   towers: Array<Tower> = [];
   items: Array<AbstractItem> = [];
   uiEngine: UiEngine = new UiEngine(this);
-  waveEngine = new WaveEngine();
+  waveEngine = new WaveEngine(this);
   inventoryEngine = new InventoryEngine();
 
   start(): void {
@@ -85,6 +86,9 @@ export default class InitEngine {
           BlzFrameSetVisible(button.handle, GetPlayerId(GetLocalPlayer()) === playerIndex);
           this.waveEngine.isInProgress[playerIndex] = false;
         });
+
+        this.waveEngine.waveGenerationFinished(playerIndex, this.waveEngine.waves[playerIndex]);
+        this.waveEngine.checkWaves();
       });
     });
   }
@@ -191,7 +195,7 @@ export default class InitEngine {
 
     trigger.addAction(() => {
       const unit = Unit.fromHandle(Unit.fromEvent().handle);
-      this.enemies.filter(e => e.unit.id !== unit.id);
+      this.enemies = this.enemies.filter(e => e.unit.id !== unit.id);
       unit.kill();
     });
   }
@@ -235,6 +239,13 @@ export default class InitEngine {
     tower.createUnit(player, x, y, 270);
 
     this.towers.push(tower);
+  }
+
+  waveFinished(player: number, wave: number): void {
+    const reward = RewardEngine.generateReward(wave);
+    reward.forEach(tower => {
+      this.inventoryEngine.addItem(player, { tower });
+    });
   }
 
   findUnitById(id: number): Enemy | Tower | undefined {

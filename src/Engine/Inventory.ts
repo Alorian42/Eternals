@@ -112,7 +112,7 @@ export default class InventoryEngine {
               const slot = this.inventory[player].findIndex(i => GetHandleId(i.handle) === id);
 
               if (slot >= 0) {
-                this.selectItem(player, this.items[player][slot]);
+                this.selectItem(player, this.items[player][slot], slot);
               }
             }
           });
@@ -145,15 +145,12 @@ export default class InventoryEngine {
     });
   }
 
-  selectItem(player: number, item: IItem): void {
+  selectItem(player: number, item: IItem, index: number): void {
     if (item.tower) {
       // @TODO create tower item
+      this.removeItem(player, index);
       printDebugMessage(`player ${player}, item ${item.tower.icon}`);
-    } else {
-      printDebugMessage(`Empty slot for player ${player}`);
     }
-
-    this.updateInventory(player);
   }
 
   addItem(player: number, item: IItem): void {
@@ -161,6 +158,12 @@ export default class InventoryEngine {
     if (this.items[player].length > this.size) {
       this.items[player].splice(this.size);
     }
+
+    this.updateInventory(player);
+  }
+
+  removeItem(player: number, index: number): void {
+    this.items[player][index] = {};
 
     this.updateInventory(player);
   }
