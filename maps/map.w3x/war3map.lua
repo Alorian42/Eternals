@@ -1,5 +1,6 @@
 udg_UnitStatIcon = __jarray("")
 gg_trg_Initialization = nil
+gg_rct_Builder_Spawn_Red = nil
 function InitGlobals()
     local i = 0
     i = 0
@@ -8,6 +9,11 @@ function InitGlobals()
         udg_UnitStatIcon[i] = ""
         i = i + 1
     end
+end
+
+function CreateRegions()
+    local we
+    gg_rct_Builder_Spawn_Red = Rect(-1888.0, 3360.0, -1472.0, 3520.0)
 end
 
 --
@@ -250,6 +256,7 @@ function main()
     SetAmbientDaySound("LordaeronSummerDay")
     SetAmbientNightSound("LordaeronSummerNight")
     SetMapMusic("Music", true, 0)
+    CreateRegions()
     InitBlizzard()
     InitGlobals()
     InitCustomTriggers()
