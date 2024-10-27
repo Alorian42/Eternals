@@ -13,9 +13,9 @@ export default class CommandsEngine {
     });
 
     trigger.addAction(() => {
-      const player = GetTriggerPlayer();
-      const string = GetEventPlayerChatString().split(' ');
-      if (string.length === 2 && Number(string[1])) {
+      const player = GetTriggerPlayer() as player;
+      const string = GetEventPlayerChatString()?.split(' ');
+      if (string?.length === 2 && Number(string[1])) {
         const zoom = Number(string[1]);
 
         DisplayTextToPlayer(player, 0, 0, `Zoom set to ${zoom}`);

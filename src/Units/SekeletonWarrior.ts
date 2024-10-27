@@ -3,7 +3,6 @@ import { Unit } from 'w3ts';
 import Enemy from './Enemy';
 
 export default class SkeletonWarrior extends Enemy implements UnitStats {
-  unit!: Unit;
   name = 'Skeleton Warrior';
 
   attack = 100;

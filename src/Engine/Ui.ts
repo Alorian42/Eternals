@@ -38,24 +38,24 @@ export default class UiEngine {
   initUi(): void {
     // Clearing old stat frames
     for (let index = 0; index < 5; index++) {
-      this.customStatMoveOutOfScreen(BlzGetFrameByName('InfoPanelIconBackdrop', index));
+      this.customStatMoveOutOfScreen(BlzGetFrameByName('InfoPanelIconBackdrop', index) as framehandle);
     }
 
-    this.customStatMoveOutOfScreen(BlzGetFrameByName('InfoPanelIconHeroIcon', 6));
-    this.customStatMoveOutOfScreen(BlzGetFrameByName('InfoPanelIconAllyTitle', 7));
-    this.customStatMoveOutOfScreen(BlzGetFrameByName('InfoPanelIconAllyGoldIcon', 7));
+    this.customStatMoveOutOfScreen(BlzGetFrameByName('InfoPanelIconHeroIcon', 6) as framehandle);
+    this.customStatMoveOutOfScreen(BlzGetFrameByName('InfoPanelIconAllyTitle', 7) as framehandle);
+    this.customStatMoveOutOfScreen(BlzGetFrameByName('InfoPanelIconAllyGoldIcon', 7) as framehandle);
 
     const trigger = new Trigger();
     trigger.addAction(() => {
-      this.customStatSelectedUnit[GetPlayerId(GetTriggerPlayer())] = GetTriggerUnit();
+      this.customStatSelectedUnit[GetPlayerId(GetTriggerPlayer() as player)] = GetTriggerUnit() as unit;
     });
 
     for (let index = 0; index < bj_MAX_PLAYER_SLOTS; index++) {
-      TriggerRegisterPlayerSelectionEventBJ(trigger.handle, Player(index), true);
+      TriggerRegisterPlayerSelectionEventBJ(trigger.handle, Player(index) as player, true);
     }
 
-    this.boxS = BlzCreateFrameByType('SIMPLEFRAME', 'CustomStatFrames.BoxSBoss', BlzGetFrameByName('SimpleUnitStatsPanel', 0), '', 0);
-    this.boxF = BlzCreateFrameByType('FRAME', 'CustomStatFrames.BoxFBoss', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), '', 0);
+    this.boxS = BlzCreateFrameByType('SIMPLEFRAME', 'CustomStatFrames.BoxSBoss', BlzGetFrameByName('SimpleUnitStatsPanel', 0) as framehandle, '', 0) as framehandle;
+    this.boxF = BlzCreateFrameByType('FRAME', 'CustomStatFrames.BoxFBoss', BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0) as framehandle, '', 0) as framehandle;
 
     this.buildUi();
   }
@@ -83,24 +83,24 @@ export default class UiEngine {
 
   customStatAdd(icon: string, text: string): void {
     this.count++;
-    const fh = BlzCreateSimpleFrame('CustomStat', this.boxS, this.count);
-    const tooltipBox = BlzCreateFrame('BoxedText', this.boxF, 0, this.count);
-    const fhHover = BlzCreateFrameByType('FRAME', 'CustomStatHover', this.boxF, '', this.count);
+    const fh = BlzCreateSimpleFrame('CustomStat', this.boxS, this.count) as framehandle;
+    const tooltipBox = BlzCreateFrame('BoxedText', this.boxF, 0, this.count) as framehandle;
+    const fhHover = BlzCreateFrameByType('FRAME', 'CustomStatHover', this.boxF, '', this.count) as framehandle;
 
     BlzFrameSetPoint(fhHover, FRAMEPOINT_BOTTOMLEFT, fh, FRAMEPOINT_BOTTOMLEFT, 0, 0);
-    BlzFrameSetPoint(fhHover, FRAMEPOINT_TOPRIGHT, BlzGetFrameByName('CustomStatText', this.count), FRAMEPOINT_TOPRIGHT, 0, 0);
+    BlzFrameSetPoint(fhHover, FRAMEPOINT_TOPRIGHT, BlzGetFrameByName('CustomStatText', this.count) as framehandle, FRAMEPOINT_TOPRIGHT, 0, 0);
     BlzFrameSetTooltip(fhHover, tooltipBox);
 
     BlzFrameSetAbsPoint(tooltipBox, FRAMEPOINT_BOTTOM, 0.6, 0.2);
     BlzFrameSetSize(tooltipBox, 0.15, 0.08);
 
-    BlzFrameSetText(BlzGetFrameByName('CustomStatText', this.count), text);
-    BlzFrameSetText(BlzGetFrameByName('BoxedTextTitle', this.count), 'TooltipTitle');
-    BlzFrameSetText(BlzGetFrameByName('BoxedTextValue', this.count), text);
-    BlzFrameSetTexture(BlzGetFrameByName('CustomStatIcon', this.count), icon, 0, true);
+    BlzFrameSetText(BlzGetFrameByName('CustomStatText', this.count) as framehandle, text);
+    BlzFrameSetText(BlzGetFrameByName('BoxedTextTitle', this.count) as framehandle, 'TooltipTitle');
+    BlzFrameSetText(BlzGetFrameByName('BoxedTextValue', this.count) as framehandle, text);
+    BlzFrameSetTexture(BlzGetFrameByName('CustomStatIcon', this.count) as framehandle, icon, 0, true);
 
-    BlzFrameSetEnable(BlzGetFrameByName('BoxedTextValue', this.count), false);
-    BlzFrameSetEnable(BlzGetFrameByName('BoxedTextTitle', this.count), false);
+    BlzFrameSetEnable(BlzGetFrameByName('BoxedTextValue', this.count) as framehandle, false);
+    BlzFrameSetEnable(BlzGetFrameByName('BoxedTextTitle', this.count) as framehandle, false);
 
     if (this.count === 1) {
       BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.31, 0.08);
@@ -109,17 +109,17 @@ export default class UiEngine {
     } else if (this.count === 9) {
       BlzFrameSetAbsPoint(fh, FRAMEPOINT_TOPLEFT, 0.435, 0.08);
     } else {
-      BlzFrameSetPoint(fh, FRAMEPOINT_TOPLEFT, BlzGetFrameByName('CustomStat', this.count - 1), FRAMEPOINT_BOTTOMLEFT, 0, 0);
+      BlzFrameSetPoint(fh, FRAMEPOINT_TOPLEFT, BlzGetFrameByName('CustomStat', this.count - 1) as framehandle, FRAMEPOINT_BOTTOMLEFT, 0, 0);
     }
 
     this.frames.push({
-      frame: fh,
-      frameIcon: BlzGetFrameByName('CustomStatIcon', this.count),
-      frameText: BlzGetFrameByName('CustomStatText', this.count),
-      frameHover: fhHover,
-      tooltipBox,
-      tooltipTitle: BlzGetFrameByName('BoxedTextTitle', this.count),
-      tooltipText: BlzGetFrameByName('BoxedTextValue', this.count),
+      frame: fh as framehandle,
+      frameIcon: BlzGetFrameByName('CustomStatIcon', this.count) as framehandle,
+      frameText: BlzGetFrameByName('CustomStatText', this.count) as framehandle,
+      frameHover: fhHover as framehandle,
+      tooltipBox: tooltipBox as framehandle,
+      tooltipTitle: BlzGetFrameByName('BoxedTextTitle', this.count) as framehandle,
+      tooltipText: BlzGetFrameByName('BoxedTextValue', this.count) as framehandle,
     });
   }
 
@@ -131,7 +131,7 @@ export default class UiEngine {
       const unit = this.engine.findUnitById(GetHandleId(unitHandle));
       isUnit = !!unit;
 
-      if (isUnit) {
+      if (!!unit) {
         UnitStatsMap.forEach((stat, index) => {
           BlzFrameSetText(this.frames[index].frameText, unit[stat].toString());
           BlzFrameSetText(this.frames[index].tooltipTitle, UnitStatsNameMap[stat]);

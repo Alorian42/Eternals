@@ -5,7 +5,7 @@ export default class BuildButton {
   }
 
   init(): void {
-    const button = new Frame('MyIconButton', Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)), 0, 0, 'BUTTON', 'ScoreScreenTabButtonTemplate');
+    const button = new Frame('MyIconButton', Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)) as Frame, 0, 0, 'BUTTON', 'ScoreScreenTabButtonTemplate');
     const buttonIconFrame = new Frame('MyIconButtonIcon', button, 0, 0, 'BACKDROP', '');
     BlzFrameSetAllPoints(buttonIconFrame.handle, button.handle);
     BlzFrameSetAbsPoint(button.handle, FRAMEPOINT_CENTER, 0.1, 0.17);

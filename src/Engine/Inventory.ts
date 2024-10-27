@@ -18,7 +18,7 @@ export default class InventoryEngine {
   }>>;
   inventoryBack!: Array<Frame>;
 
-  parent = new Frame('InventoryFrame', Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)), 0, 0, 'FRAME', '');
+  parent = new Frame('InventoryFrame', Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)) as Frame, 0, 0, 'FRAME', '');
 
   width = 8 as const;
   height = 8 as const;
@@ -84,9 +84,9 @@ export default class InventoryEngine {
           const ctx = h * this.width + w;
           const button = new Frame(`InventoryGridCell${index}`, this.inventoryBack[index], 0, ctx, 'BUTTON', 'ScoreScreenTabButtonTemplate');
           const buttonIconFrame = new Frame(`InventoryButtonBackdrop${index}`, button, 0, ctx, 'BACKDROP', '');
-          const tooltipBox = BlzCreateFrame('BoxedText', back.handle, 0, ctx + 100);
-          const tooltipTitle = BlzGetFrameByName('BoxedTextTitle', ctx + 100);
-          const tooltipText = BlzGetFrameByName('BoxedTextValue', ctx + 100);
+          const tooltipBox = BlzCreateFrame('BoxedText', back.handle, 0, ctx + 100) as framehandle;
+          const tooltipTitle = BlzGetFrameByName('BoxedTextTitle', ctx + 100) as framehandle;
+          const tooltipText = BlzGetFrameByName('BoxedTextValue', ctx + 100) as framehandle;
 
           BlzFrameSetAllPoints(buttonIconFrame.handle, button.handle);
           BlzFrameSetAbsPoint(button.handle, FRAMEPOINT_TOP, this.cellXStart + w * this.cellWithGap, this.cellYStart - h * this.cellWithGap);
@@ -105,10 +105,10 @@ export default class InventoryEngine {
           trigger.triggerRegisterFrameEvent(button, FRAMEEVENT_CONTROL_CLICK);
           trigger.addAction(() => {
             const player = GetPlayerId(GetLocalPlayer());
-            const trigger = GetPlayerId(GetTriggerPlayer());
+            const trigger = GetPlayerId(GetTriggerPlayer() as player);
 
             if (player === trigger) {
-              const id = GetHandleId(BlzGetTriggerFrame());
+              const id = GetHandleId(BlzGetTriggerFrame() as framehandle);
               const slot = this.inventory[player].findIndex(i => GetHandleId(i.handle) === id);
 
               if (slot >= 0) {

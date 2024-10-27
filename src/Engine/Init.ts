@@ -58,14 +58,14 @@ export default class InitEngine {
 
   initDamageSystem(): void {
     const trigger = CreateTrigger();
-    TriggerRegisterPlayerUnitEventSimple(trigger, Player(11), EVENT_PLAYER_UNIT_DAMAGED);
+    TriggerRegisterPlayerUnitEventSimple(trigger, Player(11) as player, EVENT_PLAYER_UNIT_DAMAGED);
     TriggerAddAction(trigger, () => {
       const handle = GetTriggerUnit();
-      const unit = this.findUnitById(GetHandleId(handle)) as Enemy;
+      const unit = this.findUnitById(GetHandleId(handle as unit)) as Enemy;
       const towerHandle = GetEventDamageSource();
-      const tower = this.findUnitById(GetHandleId(towerHandle)) as Tower;
+      const tower = this.findUnitById(GetHandleId(towerHandle as unit)) as Tower;
 
-      if (unit && tower) {
+      if (unit !== undefined && tower !== undefined) {
         unit.receiveDamage(tower);
       }
     });
@@ -100,10 +100,10 @@ export default class InitEngine {
     pickupTrigger.addAction(() => {
       const unit = GetTriggerUnit();
       const enumItem = GetManipulatedItem();
-      const item = this.items.find(i => i.item.id === GetHandleId(enumItem));
-      const tower = this.towers.find(t => t.unit.id === GetHandleId(unit));
+      const item = this.items.find(i => i.item.id === GetHandleId(enumItem as item));
+      const tower = this.towers.find(t => t.unit.id === GetHandleId(unit as unit));
 
-      item.onPickup(tower);
+      item?.onPickup(tower as Tower);
     });
 
     const dropTrigger = new Trigger();
@@ -112,16 +112,16 @@ export default class InitEngine {
     dropTrigger.addAction(() => {
       const unit = GetTriggerUnit();
       const enumItem = GetManipulatedItem();
-      const item = this.items.find(i => i.item.id === GetHandleId(enumItem));
-      const tower = this.towers.find(t => t.unit.id === GetHandleId(unit));
+      const item = this.items.find(i => i.item.id === GetHandleId(enumItem as item));
+      const tower = this.towers.find(t => t.unit.id === GetHandleId(unit as unit));
 
-      item.onDrop(tower);
+      item?.onDrop(tower as Tower);
     });
   }
 
   initPlayers(): void {
-    ForForce(GetPlayersAll(), () => {
-      const player = GetEnumPlayer();
+    ForForce(GetPlayersAll() as force, () => {
+      const player = GetEnumPlayer() as player;
       if (GetPlayerSlotState(player) === PLAYER_SLOT_STATE_PLAYING && GetPlayerController(player) === MAP_CONTROL_USER) {
         const index = GetPlayerId(player);
         this.activePlayers.push(Number(index));
@@ -130,7 +130,7 @@ export default class InitEngine {
   }
 
   initZones(player: number): void {
-    let points = [];
+    let points: {x: number, y: number}[] = [];
 
     switch (player) {
       case 0:
@@ -180,9 +180,9 @@ export default class InitEngine {
     trigger.registerEnterRegion(region.handle, () => true);
 
     trigger.addAction(() => {
-      const unit = Unit.fromHandle(Unit.fromEvent().handle);
-      const enemy = this.enemies.find(e => e.unit.id === unit.id);
-      enemy.move(next.x, next.y);
+      const unit = Unit.fromHandle(Unit.fromEvent()?.handle);
+      const enemy = this.enemies.find(e => e.unit.id === unit?.id);
+      enemy?.move(next.x, next.y);
     });
   }
 
@@ -194,9 +194,9 @@ export default class InitEngine {
     trigger.registerEnterRegion(region.handle, () => true);
 
     trigger.addAction(() => {
-      const unit = Unit.fromHandle(Unit.fromEvent().handle);
-      this.enemies = this.enemies.filter(e => e.unit.id !== unit.id);
-      unit.kill();
+      const unit = Unit.fromHandle(Unit.fromEvent()?.handle);
+      this.enemies = this.enemies.filter(e => e.unit.id !== unit?.id);
+      unit?.kill();
     });
   }
 
@@ -210,7 +210,7 @@ export default class InitEngine {
     printDebugMessage(`Wave #${waveNumber}: ${size} mobs`); // @TODO show to player proper message
 
     timer.start(1, true, () => {
-      this.enemies.push(this.spawnEnemy(wave[counter], player, waveNumber));
+      this.enemies.push(this.spawnEnemy(wave[counter], player as any, waveNumber));
       counter++;
 
       if (counter >= size) {
@@ -220,7 +220,7 @@ export default class InitEngine {
     });
   }
 
-  spawnEnemy(type: IEnemy, player: number, wave: number): Enemy {
+  spawnEnemy(type: typeof Enemy, player: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7, wave: number): Enemy {
     const { x, y, face } = ENEMY_SPAWN_POINTS[player];
     const modifier = this.waveEngine.getModifier(wave);
     printDebugMessage(modifier.toString());

@@ -3,7 +3,7 @@ import { Timer, Unit } from 'w3ts';
 import { Players } from 'w3ts/globals';
 import Tower from '../Towers/Abstract';
 
-export default abstract class Enemy implements UnitStats {
+export default class Enemy implements UnitStats {
   unit!: Unit;
   name = 'Basic Enemy';
 
@@ -42,6 +42,9 @@ export default abstract class Enemy implements UnitStats {
 
     // @TODO create damage engine
     const tag = CreateTextTagUnitBJ(`${outcomingDamage}`, this.unit.handle, 0, 8, 100, 100, 100, 1);
+
+	if (!tag) return;
+
     SetTextTagVelocityBJ(tag, 75, 90);
 
     const timer = new Timer();

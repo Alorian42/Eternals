@@ -10,7 +10,7 @@ export default class StartWaveButton {
 
   init(): void {
     for (let index = 0; index < bj_MAX_PLAYERS; index++) {
-      const button = new Frame('StartWaveButton', Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)), 0, index, 'BUTTON', 'ScoreScreenTabButtonTemplate');
+      const button = new Frame('StartWaveButton', Frame.fromHandle(BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)) as Frame, 0, index, 'BUTTON', 'ScoreScreenTabButtonTemplate');
       const buttonIconFrame = new Frame('StartWaveButtonBackdrop', button, 0, index, 'BACKDROP', '');
       BlzFrameSetAllPoints(buttonIconFrame.handle, button.handle);
       BlzFrameSetAbsPoint(button.handle, FRAMEPOINT_CENTER, 0.03, 0.18);
@@ -22,7 +22,7 @@ export default class StartWaveButton {
       trigger.triggerRegisterFrameEvent(button, FRAMEEVENT_CONTROL_CLICK);
       trigger.addAction(() => {
         const player = GetPlayerId(GetLocalPlayer());
-        const trigger = GetPlayerId(GetTriggerPlayer());
+        const trigger = GetPlayerId(GetTriggerPlayer() as player);
 
         if (player === trigger) {
           this.callback(player, this.buttons[player]);

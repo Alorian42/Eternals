@@ -3,7 +3,6 @@ import { INVENTORY_SIZE_3 } from '../Abilities/Inventory';
 import Tower from './Abstract';
 
 export default class BasicTower extends Tower {
-  unit!: Unit;
   name = 'Basic Tower';
   icon = 'ReplaceableTextures\\CommandButtons\\BTNBookOfSummoning';
 

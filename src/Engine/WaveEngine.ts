@@ -13,7 +13,7 @@ export default class WaveEngine {
   enemies: Array<{
     player: number,
     wave: number,
-    enemies: Array<Enemy>,
+    enemies: Array<typeof Enemy>,
     isInProgress: boolean,
   }> = [];
   isInProgress!: Array<boolean>;
@@ -44,6 +44,7 @@ export default class WaveEngine {
 
   checkWaves(): void {
     this.enemies = this.enemies.filter(item => {
+		// @ts-ignore
       item.enemies = item.enemies.filter(e => e.unit);
       printDebugMessage(`${item.enemies.length} ${item.isInProgress}`);
       if (item.enemies.length === 0 && !item.isInProgress) {
@@ -56,7 +57,7 @@ export default class WaveEngine {
     });
   }
 
-  generateWave(player: number): Array<IEnemy> {
+  generateWave(player: number): Array<typeof Enemy> {
     const result = [];
     const wave = this.waves[player] + 1;
     const pool = this.getEnemyPool(wave);
@@ -81,8 +82,8 @@ export default class WaveEngine {
     return Math.log(x) * x + 1;
   }
 
-  getEnemyPool(wave: number): Array<IEnemy> {
-    return wave ? [SkeletonWarrior] : [SkeletonWarrior, SkeletonWarrior]; // @TODO
+  getEnemyPool(wave: number): Array<typeof Enemy> {
+    return wave > 0 ? [SkeletonWarrior] : [SkeletonWarrior, SkeletonWarrior]; // @TODO
   }
 
   getPackSize(wave: number): number {
