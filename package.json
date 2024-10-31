@@ -12,6 +12,7 @@
     "build:defs": "ts-node scripts/dev"
   },
   "dependencies": {
+    "prettier": "^3.3.3",
     "w3ts": "^3.0.2"
   },
   "devDependencies": {

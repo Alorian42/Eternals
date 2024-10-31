@@ -9,96 +9,102 @@ import InitEngine from './Init';
 import { printDebugMessage } from '../Utils/Debug';
 
 export default class WaveEngine {
-  waves!: Array<number>;
-  enemies: Array<{
-    player: number,
-    wave: number,
-    enemies: Array<typeof Enemy>,
-    isInProgress: boolean,
-  }> = [];
-  isInProgress!: Array<boolean>;
-  engine!: InitEngine;
+	waves!: Array<number>;
+	enemies: Array<{
+		player: number;
+		wave: number;
+		enemies: Array<typeof Enemy>;
+		isInProgress: boolean;
+	}> = [];
+	isInProgress!: Array<boolean>;
+	engine!: InitEngine;
 
-  constructor(engine: InitEngine) {
-    this.engine = engine;
-    this.waves = [];
-    for (let index = 0; index < bj_MAX_PLAYERS; index++) {
-      this.waves.push(0);
-    }
+	constructor(engine: InitEngine) {
+		this.engine = engine;
+		this.waves = [];
+		for (let index = 0; index < bj_MAX_PLAYERS; index++) {
+			this.waves.push(0);
+		}
 
-    this.isInProgress = [];
-    for (let index = 0; index < bj_MAX_PLAYERS; index++) {
-      this.isInProgress.push(false);
-    }
+		this.isInProgress = [];
+		for (let index = 0; index < bj_MAX_PLAYERS; index++) {
+			this.isInProgress.push(false);
+		}
 
-    this.enemyDiesTrigger();
-  }
+		this.enemyDiesTrigger();
+	}
 
-  enemyDiesTrigger(): void {
-    const trigger = new Trigger();
-    trigger.registerPlayerUnitEvent(Players[11], EVENT_PLAYER_UNIT_DEATH, () => true);
-    trigger.addAction(() => {
-      this.checkWaves();
-    });
-  }
+	enemyDiesTrigger(): void {
+		const trigger = new Trigger();
+		trigger.registerPlayerUnitEvent(
+			Players[11],
+			EVENT_PLAYER_UNIT_DEATH,
+			() => true
+		);
+		trigger.addAction(() => {
+			this.checkWaves();
+		});
+	}
 
-  checkWaves(): void {
-    this.enemies = this.enemies.filter(item => {
-		// @ts-ignore
-      item.enemies = item.enemies.filter(e => e.unit);
-      printDebugMessage(`${item.enemies.length} ${item.isInProgress}`);
-      if (item.enemies.length === 0 && !item.isInProgress) {
-        this.engine.waveFinished(item.player, item.wave);
+	checkWaves(): void {
+		this.enemies = this.enemies.filter((item) => {
+			// @ts-ignore
+			item.enemies = item.enemies.filter((e) => e.unit);
+			printDebugMessage(`${item.enemies.length} ${item.isInProgress}`);
+			if (item.enemies.length === 0 && !item.isInProgress) {
+				this.engine.waveFinished(item.player, item.wave);
 
-        return false;
-      }
+				return false;
+			}
 
-      return true;
-    });
-  }
+			return true;
+		});
+	}
 
-  generateWave(player: number): Array<typeof Enemy> {
-    const result = [];
-    const wave = this.waves[player] + 1;
-    const pool = this.getEnemyPool(wave);
-    const size = this.getPackSize(wave);
-    for (let index = 0; index < size; index++) {
-      result.push(getRandomElement(pool));
-    }
+	generateWave(player: number): Array<typeof Enemy> {
+		const result = [];
+		const wave = this.waves[player] + 1;
+		const pool = this.getEnemyPool(wave);
+		const size = this.getPackSize(wave);
+		for (let index = 0; index < size; index++) {
+			result.push(getRandomElement(pool));
+		}
 
-    this.waves[player]++;
-    this.enemies.push({
-      player,
-      wave,
-      // @TODO this is not real spawned units ;(
-      enemies: result,
-      isInProgress: true,
-    });
+		this.waves[player]++;
+		this.enemies.push({
+			player,
+			wave,
+			// @TODO this is not real spawned units ;(
+			enemies: result,
+			isInProgress: true,
+		});
 
-    return result;
-  }
+		return result;
+	}
 
-  getModifier(x: number): number {
-    return Math.log(x) * x + 1;
-  }
+	getModifier(x: number): number {
+		return Math.log(x) * x + 1;
+	}
 
-  getEnemyPool(wave: number): Array<typeof Enemy> {
-    return wave > 0 ? [SkeletonWarrior] : [SkeletonWarrior, SkeletonWarrior]; // @TODO
-  }
+	getEnemyPool(wave: number): Array<typeof Enemy> {
+		return wave > 0
+			? [SkeletonWarrior]
+			: [SkeletonWarrior, SkeletonWarrior]; // @TODO
+	}
 
-  getPackSize(wave: number): number {
-    return Math.max(5, Math.floor(Math.random() * wave));
-  }
+	getPackSize(wave: number): number {
+		return Math.max(5, Math.floor(Math.random() * wave));
+	}
 
-  waveGenerationFinished(player: number, wave: number): void {
-    const item = this.enemies.find(e => {
-      return e.player === player && e.wave === wave;
-    });
+	waveGenerationFinished(player: number, wave: number): void {
+		const item = this.enemies.find((e) => {
+			return e.player === player && e.wave === wave;
+		});
 
-    if (item) {
-      item.isInProgress = false;
+		if (item) {
+			item.isInProgress = false;
 
-      printDebugMessage(`Wave finished ${item.wave}`);
-    }
-  }
+			printDebugMessage(`Wave finished ${item.wave}`);
+		}
+	}
 }
