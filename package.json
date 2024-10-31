@@ -12,10 +12,10 @@
     "build:defs": "ts-node scripts/dev"
   },
   "dependencies": {
-    "prettier": "^3.3.3",
     "w3ts": "^3.0.2"
   },
   "devDependencies": {
+    "prettier": "^3.3.3",
     "@types/fs-extra": "8.1.1",
     "@types/node": "12.19.1",
     "@types/pako": "1.0.1",
