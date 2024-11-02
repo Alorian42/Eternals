@@ -1,5 +1,6 @@
 import Tower from 'Towers/Abstract';
 import Enemy from 'Units/Enemy';
+import { printDebugMessage } from 'Utils/Debug';
 
 export default class CombatCalculatorEngine {
 	static calculateDamage(
@@ -69,7 +70,7 @@ export default class CombatCalculatorEngine {
 	}
 
 	static convertArmorToDamageReduction(armor: number): number {
-		return armor / (armor + 1000);
+		return Math.min(0.8, armor / (armor + 1000));
 	}
 
 	static convertResToDamageReduction(res: number): number {
@@ -77,15 +78,23 @@ export default class CombatCalculatorEngine {
 	}
 
 	static considerBlock(block: number): boolean {
-		return Math.random() < block / 100;
+		const blockChance = block / 100;
+		const chance = Math.random() < blockChance;
+
+		return chance;
 	}
 
 	static considerEvade(evade: number): boolean {
-		return Math.random() < evade / 100;
+		const evadeChance = evade / 100;
+		const chance = Math.random() < evadeChance;
+
+		return chance;
 	}
 
 	static considerCrit(chance: number): boolean {
-		return true;
-		return Math.random() < chance / 100;
+		const critChance = chance / 100;
+		const crit = Math.random() < critChance;
+
+		return crit;
 	}
 }

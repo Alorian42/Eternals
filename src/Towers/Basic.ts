@@ -15,7 +15,7 @@ export default class BasicTower extends Tower {
 	lightningRes = 0;
 	attackSpeed = 1;
 	critChance = 50;
-	critDamage = 0;
+	critDamage = 25;
 	spellCritChance = 0;
 	spellCritDamage = 0;
 

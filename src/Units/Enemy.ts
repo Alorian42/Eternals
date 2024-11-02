@@ -12,8 +12,8 @@ export default class Enemy implements UnitStats {
 	coldAddAttack = 0;
 	lightningAddAttack = 0;
 	armor = 100;
-	evade = 200;
-	block = 10;
+	evade = 2;
+	block = 5;
 	fireRes = 10;
 	coldRes = 10;
 	lightningRes = 10;
