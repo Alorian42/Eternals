@@ -1,6 +1,6 @@
 ﻿STRING 1
 {
-Eternals TD
+Community TD
 }
 
 STRING 2
@@ -155,5 +155,23 @@ STRING 31
 // Abilities: A008 (Build Advanced Tower), Name (Name)
 {
 Build Advanced Tower
+}
+
+STRING 32
+// Units: h001 (Skeleton Archer), Name (Name)
+{
+Skeleton Archer
+}
+
+STRING 33
+// Abilities: A008 (Build Advanced Tower), Tip (Tooltip - Normal)
+{
+Builds Advanced Tower
+}
+
+STRING 34
+// Abilities: A008 (Build Advanced Tower), Ubertip (Tooltip - Normal - Extended)
+{
+Builds Advanced Tower 2
 }
 

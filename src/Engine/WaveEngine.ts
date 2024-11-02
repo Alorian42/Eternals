@@ -7,6 +7,7 @@ import Enemy from '../Units/Enemy';
 import RewardEngine from './Reward';
 import InitEngine from './Init';
 import { printDebugMessage } from '../Utils/Debug';
+import SkeletonArcher from 'Units/SkeletonArcher';
 
 export default class WaveEngine {
 	waves!: Array<number>;
@@ -87,9 +88,7 @@ export default class WaveEngine {
 	}
 
 	getEnemyPool(wave: number): Array<typeof Enemy> {
-		return wave > 0
-			? [SkeletonWarrior]
-			: [SkeletonWarrior, SkeletonWarrior]; // @TODO
+		return [SkeletonWarrior, SkeletonArcher]; // @TODO
 	}
 
 	getPackSize(wave: number): number {

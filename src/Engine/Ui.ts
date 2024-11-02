@@ -203,37 +203,34 @@ export default class UiEngine {
 
 	customStatUpdate(): void {
 		const isVisible = BlzFrameIsVisible(this.boxS);
-		let isUnit = false;
-		if (isVisible) {
-			const unitHandle =
-				this.customStatSelectedUnit[GetPlayerId(GetLocalPlayer())];
-			const unit = this.engine.findUnitById(GetHandleId(unitHandle));
-			isUnit = !!unit;
+		const unitHandle =
+			this.customStatSelectedUnit[GetPlayerId(GetLocalPlayer())];
+		const unit = this.engine.findUnitById(GetHandleId(unitHandle));
+		const isUnit = !!unit;
 
-			if (!!unit) {
-				BlzFrameSetVisible(this.boxF, isVisible);
-				UnitStatsMap.forEach((stat, index) => {
-					BlzFrameSetText(
-						this.frames[index].frameText,
-						unit[stat].toString()
-					);
-					BlzFrameSetText(
-						this.frames[index].tooltipTitle,
-						UnitStatsNameMap[stat]
-					);
-					BlzFrameSetText(
-						this.frames[index].tooltipText,
-						unit[stat].toString()
-					); // @todo calc dps, damage reduction, etc.
-					BlzFrameSetVisible(
-						this.frames[index].tooltipBox,
-						BlzFrameIsVisible(this.frames[index].frameHover)
-					);
-				});
-			}
-		}
 		if (isUnit) {
-			for (let index = 1; index <= this.count; index++) {}
+			BlzFrameSetVisible(this.boxS, true);
+			BlzFrameSetVisible(this.boxF, isVisible);
+			UnitStatsMap.forEach((stat, index) => {
+				BlzFrameSetText(
+					this.frames[index].frameText,
+					unit.getStatValue(stat).toString()
+				);
+				BlzFrameSetText(
+					this.frames[index].tooltipTitle,
+					UnitStatsNameMap[stat]
+				);
+				BlzFrameSetText(
+					this.frames[index].tooltipText,
+					unit.getStatDescription(stat)
+				); // @todo calc dps, damage reduction, etc.
+				BlzFrameSetVisible(
+					this.frames[index].tooltipBox,
+					BlzFrameIsVisible(this.frames[index].frameHover)
+				);
+			});
+		} else {
+			BlzFrameSetVisible(this.boxS, false);
 		}
 	}
 

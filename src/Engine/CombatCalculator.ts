@@ -74,7 +74,7 @@ export default class CombatCalculatorEngine {
 	}
 
 	static convertResToDamageReduction(res: number): number {
-		return Math.max(1, res / 100);
+		return Math.min(1, res / 100);
 	}
 
 	static considerBlock(block: number): boolean {

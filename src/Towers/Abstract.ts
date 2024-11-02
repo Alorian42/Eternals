@@ -9,27 +9,11 @@ import {
 	INVENTORY_SIZE_5,
 	INVENTORY_SIZE_6,
 } from '../Abilities/Inventory';
+import AbstractUnit from 'Units/Abstract';
 
-export default abstract class Tower implements UnitStats {
-	unit!: Unit;
-	name!: string;
+export default abstract class Tower extends AbstractUnit {
 	icon = 'ReplaceableTextures\\CommandButtons\\BTNElvenGuardTower';
 
-	attack = 0;
-	fireAddAttack = 0;
-	coldAddAttack = 0;
-	lightningAddAttack = 0;
-	armor = 0;
-	evade = 0;
-	block = 0;
-	fireRes = 0;
-	coldRes = 0;
-	lightningRes = 0;
-	attackSpeed = 0;
-	critChance = 0;
-	critDamage = 0;
-	spellCritChance = 0;
-	spellCritDamage = 0;
 	inventorySize: InventorySize = 'A000';
 
 	get tooltip(): string {
@@ -46,6 +30,7 @@ export default abstract class Tower implements UnitStats {
 	}
 
 	constructor(attackCooldown: number, inventorySize: InventorySize) {
+		super();
 		this.attackSpeed = attackCooldown;
 		this.inventorySize = inventorySize;
 	}
@@ -56,7 +41,7 @@ export default abstract class Tower implements UnitStats {
 	}
 
 	createUnit(player: MapPlayer, x: number, y: number, face: number): void {
-		this.unit = new Unit(player, this.unitId, x, y, face);
+		this.unit = Unit.create(player, this.unitId, x, y, face) as Unit;
 
 		this.initTower();
 	}
@@ -82,28 +67,8 @@ export default abstract class Tower implements UnitStats {
 		return this.attack;
 	}
 
-	get unitId(): number {
-		return FourCC('t001');
-	}
-
 	get buildAbility(): number {
 		return FourCC('');
-	}
-
-	get attackTotal(): number {
-		return (
-			this.attack +
-			this.fireAddAttack +
-			this.coldAddAttack +
-			this.lightningAddAttack
-		);
-	}
-
-	get attackTotalDescription(): string {
-		return `Physical Damage: ${this.attack}
-	  Fire Damage: ${this.fireAddAttack}
-	  Cold Damage: ${this.coldAddAttack}
-	  Ligtning Damage: ${this.lightningAddAttack}`;
 	}
 
 	get inventorySizeNumber(): number {

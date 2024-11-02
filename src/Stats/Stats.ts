@@ -19,17 +19,17 @@ export interface UnitStats {
 
 export const UnitStatsMap: Array<keyof UnitStats> = [
 	'attack',
+	'attackSpeed',
+	'critChance',
+	'critDamage',
+	'spellCritChance',
+	'spellCritDamage',
 	'armor',
 	'evade',
 	'block',
 	'fireRes',
 	'coldRes',
 	'lightningRes',
-	'attackSpeed',
-	'critChance',
-	'critDamage',
-	'spellCritChance',
-	'spellCritDamage',
 ];
 
 export const UnitStatsNameMap: {
