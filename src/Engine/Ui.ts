@@ -1,6 +1,7 @@
 import { UnitStatsMap, UnitStatsNameMap } from '../Stats/Stats';
 import { Timer, Trigger } from 'w3ts';
 import InitEngine from './Init';
+import { printDebugMessage } from 'Utils/Debug';
 
 // Custom Stats by Tasyen
 // https://www.hiveworkshop.com/threads/ui-3x3-custom-unit-stats.316905/
@@ -53,7 +54,7 @@ export default class UiEngine {
 			BlzGetFrameByName('InfoPanelIconAllyGoldIcon', 7) as framehandle
 		);
 
-		const trigger = new Trigger();
+		const trigger = Trigger.create();
 		trigger.addAction(() => {
 			this.customStatSelectedUnit[
 				GetPlayerId(GetTriggerPlayer() as player)
@@ -101,7 +102,7 @@ export default class UiEngine {
 		this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
 		this.customStatAdd(udg_UnitStatIcon[this.count + 1], '');
 
-		const timer = new Timer();
+		const timer = Timer.create();
 		timer.start(0.1, true, () => {
 			this.customStatUpdate();
 		});
@@ -120,32 +121,15 @@ export default class UiEngine {
 			0,
 			this.count
 		) as framehandle;
-		const fhHover = BlzCreateFrameByType(
-			'FRAME',
-			'CustomStatHover',
-			this.boxF,
-			'',
+		const fhHover = BlzGetFrameByName(
+			'CustomStatToolTip',
 			this.count
 		) as framehandle;
 
-		BlzFrameSetPoint(
-			fhHover,
-			FRAMEPOINT_BOTTOMLEFT,
-			fh,
-			FRAMEPOINT_BOTTOMLEFT,
-			0,
-			0
-		);
-		BlzFrameSetPoint(
-			fhHover,
-			FRAMEPOINT_TOPRIGHT,
-			BlzGetFrameByName('CustomStatText', this.count) as framehandle,
-			FRAMEPOINT_TOPRIGHT,
-			0,
-			0
-		);
-		BlzFrameSetTooltip(fhHover, tooltipBox);
+		BlzFrameSetTooltip(fh, fhHover);
+		BlzFrameSetVisible(fhHover, false);
 
+		BlzFrameSetVisible(tooltipBox, false);
 		BlzFrameSetAbsPoint(tooltipBox, FRAMEPOINT_BOTTOM, 0.6, 0.2);
 		BlzFrameSetSize(tooltipBox, 0.15, 0.08);
 
@@ -227,6 +211,7 @@ export default class UiEngine {
 			isUnit = !!unit;
 
 			if (!!unit) {
+				BlzFrameSetVisible(this.boxF, isVisible);
 				UnitStatsMap.forEach((stat, index) => {
 					BlzFrameSetText(
 						this.frames[index].frameText,
@@ -240,11 +225,15 @@ export default class UiEngine {
 						this.frames[index].tooltipText,
 						unit[stat].toString()
 					); // @todo calc dps, damage reduction, etc.
+					BlzFrameSetVisible(
+						this.frames[index].tooltipBox,
+						BlzFrameIsVisible(this.frames[index].frameHover)
+					);
 				});
 			}
 		}
 		if (isUnit) {
-			BlzFrameSetVisible(this.boxF, isVisible);
+			for (let index = 1; index <= this.count; index++) {}
 		}
 	}
 

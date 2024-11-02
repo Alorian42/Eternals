@@ -35,7 +35,7 @@ export default class WaveEngine {
 	}
 
 	enemyDiesTrigger(): void {
-		const trigger = new Trigger();
+		const trigger = Trigger.create();
 		trigger.registerPlayerUnitEvent(
 			Players[11],
 			EVENT_PLAYER_UNIT_DEATH,

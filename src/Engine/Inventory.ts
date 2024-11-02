@@ -178,7 +178,7 @@ export default class InventoryEngine {
 					BlzFrameSetEnable(tooltipText, false);
 					BlzFrameSetEnable(tooltipTitle, false);
 
-					const trigger = new Trigger();
+					const trigger = Trigger.create();
 					trigger.triggerRegisterFrameEvent(
 						button,
 						FRAMEEVENT_CONTROL_CLICK

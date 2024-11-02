@@ -31,9 +31,10 @@ export default class Enemy implements UnitStats {
 		IssuePointOrder(this.unit.handle, 'move', x, y);
 	}
 
-	receiveDamage(tower: Tower): void {
-		// @TODO calculate incoming damage
-		const outcomingDamage = tower.attack;
+	receiveDamage(
+		outcomingDamage: number,
+		settings: Record<string, boolean> = {}
+	): void {
 		const unitLife = GetUnitStateSwap(UNIT_STATE_LIFE, this.unit.handle);
 		SetUnitLifeBJ(this.unit.handle, unitLife - outcomingDamage);
 
@@ -41,8 +42,13 @@ export default class Enemy implements UnitStats {
 		// tower.unit.damageTarget(this.unit, outcomingDamage);
 
 		// @TODO create damage engine
+		const text = settings.isEvaded
+			? 'Evaded'
+			: `${outcomingDamage} ${settings.isBlocked ? '(Blocked!)' : ''}${
+					settings.isCritical ? '(Critical!)' : ''
+				}`;
 		const tag = CreateTextTagUnitBJ(
-			`${outcomingDamage}`,
+			text,
 			this.unit.handle,
 			0,
 			8,
@@ -56,7 +62,7 @@ export default class Enemy implements UnitStats {
 
 		SetTextTagVelocityBJ(tag, 75, 90);
 
-		const timer = new Timer();
+		const timer = Timer.create();
 		timer.start(0.7, false, () => {
 			timer.destroy();
 			DestroyTextTagBJ(tag);

@@ -26,6 +26,7 @@ import WaveEngine from './WaveEngine';
 import { printDebugMessage } from '../Utils/Debug';
 import InventoryEngine from './Inventory';
 import RewardEngine from './Reward';
+import CombatCalculatorEngine from './CombatCalculator';
 
 export default class InitEngine {
 	enemies: Array<Enemy> = [];
@@ -85,7 +86,25 @@ export default class InitEngine {
 			) as Tower;
 
 			if (unit !== undefined && tower !== undefined) {
-				unit.receiveDamage(tower);
+				let damage = 0;
+				const settings: Record<string, boolean> = {};
+				try {
+					damage = CombatCalculatorEngine.calculateDamage(
+						tower,
+						unit
+					);
+				} catch (e: any) {
+					damage = e.damage;
+
+					if (e.message === 'Blocked') {
+						settings.isBlocked = true;
+					} else if (e.message === 'Evaded') {
+						settings.isEvaded = true;
+					} else if (e.message === 'Critical') {
+						settings.isCritical = true;
+					}
+				}
+				unit.receiveDamage(damage, settings);
 			}
 		});
 	}
