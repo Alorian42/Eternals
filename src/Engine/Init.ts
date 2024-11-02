@@ -29,6 +29,7 @@ import RewardEngine from './Reward';
 import CombatCalculatorEngine from './CombatCalculator';
 import DefaultBuilder from 'Builders/DefaultBuilder';
 import AdvancedTower from 'Towers/Advanced';
+import MultipleProjectiles from 'Items/MultipleProjectiles';
 
 export default class InitEngine {
 	enemies: Array<Enemy> = [];
@@ -61,7 +62,9 @@ export default class InitEngine {
 			this.initBuilder(index, -2170, 2600);
 			this.buildTower(BasicTower, Players[index], -2170, 2600);
 			const addColdDamage = new AddColdDamageGem(-2000, 2600);
+			const multiProj = new MultipleProjectiles(-2000, 2800);
 			this.items.push(addColdDamage);
+			this.items.push(multiProj);
 
 			this.inventoryEngine.addItem(index, {
 				tower: new AdvancedTower(),

@@ -175,3 +175,21 @@ STRING 34
 Builds Advanced Tower 2
 }
 
+STRING 35
+// Abilities: A009 (Multiple Projectiles), Name (Name)
+{
+Multiple Projectiles
+}
+
+STRING 36
+// Abilities: A009 (Multiple Projectiles), Tip (Tooltip - Normal)
+{
+Multiple Projectiles
+}
+
+STRING 38
+// Abilities: A009 (Multiple Projectiles), Ubertip (Tooltip - Normal - Extended)
+{
+Increases projectile count by 1.
+}
+

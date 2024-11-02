@@ -1,5 +1,4 @@
 import { UnitStats } from '../Stats/Stats';
-import { Unit } from 'w3ts';
 import Enemy from './Enemy';
 
 export default class SkeletonWarrior extends Enemy implements UnitStats {
