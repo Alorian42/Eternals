@@ -12,11 +12,19 @@ export default class AddColdDamageGem extends AbstractItem {
 		return FourCC('I000');
 	}
 
+	get name(): string {
+		return 'Add Cold Damage Gem';
+	}
+
+	get description(): string {
+		return 'Increases cold attack by 100';
+	}
+
 	onPickup(tower: Tower): void {
-		tower.attack += this.bonusDamage;
+		tower.coldAddAttack += this.bonusDamage;
 	}
 
 	onDrop(tower: Tower): void {
-		tower.attack -= this.bonusDamage;
+		tower.coldAddAttack -= this.bonusDamage;
 	}
 }

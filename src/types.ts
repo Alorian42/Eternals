@@ -13,11 +13,4 @@ export interface ITower {
 	new (): BasicTower;
 }
 
-export type InventorySize =
-	| 'A000'
-	| 'A001'
-	| 'A002'
-	| 'A003'
-	| 'A004'
-	| 'A005'
-	| 'A006';
+export type InventorySize = 'A000' | 'A001' | 'A002' | 'A003' | 'A004' | 'A005';

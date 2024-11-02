@@ -10,7 +10,7 @@ import {
 	PLAYER_7,
 	ENEMY_SPAWN_POINTS,
 } from '../Constants/global';
-import { Rectangle, Region, Timer, Trigger, Unit, MapPlayer } from 'w3ts';
+import { Rectangle, Region, Timer, Trigger, Unit, MapPlayer, Item } from 'w3ts';
 import Enemy from '../Units/Enemy';
 import { IPoint } from 'types';
 import { IEnemy, ITower } from '../types';
@@ -24,19 +24,23 @@ import UiEngine from './Ui';
 import StartWaveButton from '../Buttons/StartWave';
 import WaveEngine from './WaveEngine';
 import { printDebugMessage } from '../Utils/Debug';
-import InventoryEngine from './Inventory';
+import InventoryEngine, { IItem } from './Inventory';
 import RewardEngine from './Reward';
 import CombatCalculatorEngine from './CombatCalculator';
+import DefaultBuilder from 'Builders/DefaultBuilder';
+import AdvancedTower from 'Towers/Advanced';
 
 export default class InitEngine {
 	enemies: Array<Enemy> = [];
 	commands = new CommandsEngine();
 	activePlayers: Array<number> = [];
 	towers: Array<Tower> = [];
+	builders: Record<number, DefaultBuilder> = {};
 	items: Array<AbstractItem> = [];
 	uiEngine: UiEngine = new UiEngine(this);
 	waveEngine = new WaveEngine(this);
-	inventoryEngine = new InventoryEngine();
+	inventoryEngine = new InventoryEngine(this);
+	lastUsedBuildItem: Record<number, number> = {};
 
 	start(): void {
 		printDebugMessage('start');
@@ -54,18 +58,65 @@ export default class InitEngine {
 
 		this.activePlayers.forEach((index) => {
 			this.initZones(index);
+			this.initBuilder(index, -2170, 2600);
 			this.buildTower(BasicTower, Players[index], -2170, 2600);
 			const addColdDamage = new AddColdDamageGem(-2000, 2600);
 			this.items.push(addColdDamage);
 
 			this.inventoryEngine.addItem(index, {
-				tower: new BasicTower(),
+				tower: new AdvancedTower(),
+			});
+			this.inventoryEngine.addItem(index, {
+				tower: new AdvancedTower(),
 			});
 		});
 
 		this.initItems();
 		this.initButtons();
 		this.initDamageSystem();
+		this.initBuildingSystem();
+	}
+
+	initBuilder(index: number, x: number, y: number): void {
+		const player = MapPlayer.fromIndex(index) as MapPlayer;
+		const builder = new DefaultBuilder();
+		builder.createUnit(player, x, y, 270);
+
+		this.builders[index] = builder;
+	}
+
+	getBuilder(index: number): DefaultBuilder {
+		return this.builders[index];
+	}
+
+	initBuildingSystem(): void {
+		const trigger = Trigger.create();
+
+		trigger.registerAnyUnitEvent(EVENT_PLAYER_UNIT_CONSTRUCT_FINISH);
+		trigger.addAction(() => {
+			const unit = Unit.fromHandle(GetConstructedStructure());
+			const player = GetPlayerId(GetTriggerPlayer() as player);
+			const builder = this.getBuilder(player);
+
+			if (!unit) {
+				return;
+			}
+			const towerType = this.getTowerType(unit.typeId) as ITower;
+			const tower = new towerType();
+			tower.fromUnit(unit);
+			this.towers.push(tower);
+			builder.unit.removeAbility(tower.buildAbility);
+		});
+	}
+
+	getTowerType(typeId?: number): ITower | undefined {
+		if (typeId === FourCC('t001')) {
+			return BasicTower;
+		} else if (typeId === FourCC('t002')) {
+			return AdvancedTower;
+		}
+
+		return;
 	}
 
 	initDamageSystem(): void {
@@ -315,6 +366,14 @@ export default class InitEngine {
 		this.towers.push(tower);
 	}
 
+	spawnTowerItem(player: number, i: IItem): void {
+		if (!i.tower) {
+			return;
+		}
+		const builder = this.getBuilder(player);
+		builder.unit.addAbility(i.tower.buildAbility);
+	}
+
 	waveFinished(player: number, wave: number): void {
 		const reward = RewardEngine.generateReward(wave);
 		reward.forEach((tower) => {
@@ -327,5 +386,8 @@ export default class InitEngine {
 			this.enemies.find((e) => e.unit.id === id) ||
 			this.towers.find((t) => t.unit.id === id)
 		);
+	}
+	findItemById(id: number): AbstractItem | undefined {
+		return this.items.find((i) => i.item.id === id);
 	}
 }

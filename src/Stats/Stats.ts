@@ -14,6 +14,7 @@ export interface UnitStats {
 	fireAddAttack: number;
 	coldAddAttack: number;
 	lightningAddAttack: number;
+	get attackTotal(): number;
 }
 
 export const UnitStatsMap: Array<keyof UnitStats> = [

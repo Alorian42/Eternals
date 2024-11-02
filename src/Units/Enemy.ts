@@ -81,4 +81,8 @@ export default class Enemy implements UnitStats {
 	get unitId(): number {
 		return FourCC('h000');
 	}
+
+	get attackTotal(): number {
+		return 0;
+	}
 }

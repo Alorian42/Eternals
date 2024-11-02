@@ -2,11 +2,11 @@ import { Unit } from 'w3ts';
 import { INVENTORY_SIZE_3 } from '../Abilities/Inventory';
 import Tower from './Abstract';
 
-export default class BasicTower extends Tower {
-	name = 'Basic Tower';
-	icon = 'ReplaceableTextures\\CommandButtons\\BTNBookOfSummoning';
+export default class AdvancedTower extends Tower {
+	name = 'Advanced Tower';
+	icon = 'ReplaceableTextures\\CommandButtons\\BTNHumanWatchTower';
 
-	attack = 100;
+	attack = 300;
 	armor = 0;
 	evade = 0;
 	block = 0;
@@ -24,10 +24,10 @@ export default class BasicTower extends Tower {
 	}
 
 	get unitId(): number {
-		return FourCC('t001');
+		return FourCC('t002');
 	}
 
 	get buildAbility(): number {
-		return FourCC('A006');
+		return FourCC('A008');
 	}
 }

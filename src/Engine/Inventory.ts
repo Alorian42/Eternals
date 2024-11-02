@@ -2,8 +2,9 @@ import Tower from 'Towers/Abstract';
 import InventoryButton from '../Buttons/Inventory';
 import { printDebugMessage } from '../Utils/Debug';
 import { Frame, Trigger } from 'w3ts';
+import InitEngine from './Init';
 
-interface IItem {
+export interface IItem {
 	tower?: Tower;
 }
 
@@ -45,12 +46,14 @@ export default class InventoryEngine {
 		'ReplaceableTextures\\CommandButtonsDisabled\\DISnightelf-inventory-slotfiller';
 
 	button!: InventoryButton;
+	initEngine!: InitEngine;
 
 	get size(): number {
 		return this.width * this.height;
 	}
 
-	constructor() {
+	constructor(engine: InitEngine) {
+		this.initEngine = engine;
 		this.items = [];
 		for (let index = 0; index < bj_MAX_PLAYERS; index++) {
 			const items = [];
@@ -246,7 +249,7 @@ export default class InventoryEngine {
 
 	selectItem(player: number, item: IItem, index: number): void {
 		if (item.tower) {
-			// @TODO create tower item
+			this.initEngine.spawnTowerItem(player, item);
 			this.removeItem(player, index);
 			printDebugMessage(`player ${player}, item ${item.tower.icon}`);
 		}

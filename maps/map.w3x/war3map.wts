@@ -133,3 +133,27 @@ STRING 26
 Skeleton Warrior
 }
 
+STRING 27
+// Units: B001 (Builder), Name (Name)
+{
+Builder
+}
+
+STRING 28
+// Abilities: A006 (Build Tower), Name (Name)
+{
+Build Tower
+}
+
+STRING 30
+// Units: t002 (Advanced Tower), Name (Name)
+{
+Advanced Tower
+}
+
+STRING 31
+// Abilities: A008 (Build Advanced Tower), Name (Name)
+{
+Build Advanced Tower
+}
+

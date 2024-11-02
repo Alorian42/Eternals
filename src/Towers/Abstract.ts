@@ -50,8 +50,18 @@ export default abstract class Tower implements UnitStats {
 		this.inventorySize = inventorySize;
 	}
 
+	fromUnit(unit: Unit): void {
+		this.unit = unit;
+		this.initTower();
+	}
+
 	createUnit(player: MapPlayer, x: number, y: number, face: number): void {
 		this.unit = new Unit(player, this.unitId, x, y, face);
+
+		this.initTower();
+	}
+
+	initTower(): void {
 		this.setBaseTowerDamage(0);
 		this.unit.setAttackCooldown(this.attackSpeed, 0);
 		this.unit.invulnerable = true;
@@ -74,6 +84,26 @@ export default abstract class Tower implements UnitStats {
 
 	get unitId(): number {
 		return FourCC('t001');
+	}
+
+	get buildAbility(): number {
+		return FourCC('');
+	}
+
+	get attackTotal(): number {
+		return (
+			this.attack +
+			this.fireAddAttack +
+			this.coldAddAttack +
+			this.lightningAddAttack
+		);
+	}
+
+	get attackTotalDescription(): string {
+		return `Physical Damage: ${this.attack}
+	  Fire Damage: ${this.fireAddAttack}
+	  Cold Damage: ${this.coldAddAttack}
+	  Ligtning Damage: ${this.lightningAddAttack}`;
 	}
 
 	get inventorySizeNumber(): number {
