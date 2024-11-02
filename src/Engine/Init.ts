@@ -371,6 +371,8 @@ export default class InitEngine {
 			return;
 		}
 		const builder = this.getBuilder(player);
+
+		// @TODO implement counter for same towers
 		builder.unit.addAbility(i.tower.buildAbility);
 	}
 
