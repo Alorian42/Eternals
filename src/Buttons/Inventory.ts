@@ -52,7 +52,7 @@ export default class InventoryButton {
 				GetPlayerId(GetLocalPlayer()) === index
 			);
 
-			const trigger = new Trigger();
+			const trigger = Trigger.create();
 			trigger.triggerRegisterFrameEvent(button, FRAMEEVENT_CONTROL_CLICK);
 			trigger.addAction(() => {
 				const player = GetPlayerId(GetLocalPlayer());
